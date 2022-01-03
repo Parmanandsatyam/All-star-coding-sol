@@ -1,0 +1,80 @@
+#include <cstdio>
+
+using namespace std;
+
+int v[4][10];
+double r[4][10];
+
+int main()
+{
+    freopen("baseball.in","r",stdin);
+    freopen("baseball.out","w",stdout);
+    
+    int i,j,juc;
+    double max,min;
+    for(i=1;i<=3;i++)
+                     for(j=1;j<=9;j++) scanf("%d",&v[i][j]);
+                     
+    for(i=1;i<=3;i++)
+    {
+                     r[i][1]=v[i][1]+v[i][2]+v[i][3]+v[i][4]+v[i][5]+ v[i][6]+v[i][7]+v[i][8]+v[i][9];
+                     r[i][2]=r[i][1]-v[i][7]-v[i][8]-v[i][9];
+                     r[i][3]=v[i][2]+v[i][3]+v[i][4]+v[i][5];
+                     r[i][4]=r[i][3]/r[i][2];
+                     r[i][5]=v[i][2]+2*v[i][3]+3*v[i][4]+4*v[i][5];
+                     r[i][6]=r[i][5]/r[i][2];
+                     r[i][7]=(r[i][3]+v[i][7]+v[i][8])/(r[i][2]+v[i][7]+v[i][8]+v[i][9]);
+    }
+    
+
+    
+    max=-1;
+    for(i=1;i<=3;i++) 
+                      if(r[i][4]>max) 
+                      {
+                                      max=r[i][4];
+                                      juc=i;
+                      }
+    for(i=1;i<=3;++i)
+    {
+                     if(max==r[i][4])
+                     printf("%c ", i+'A'-1);               
+    }
+    printf("%.3lf\n",max);
+    
+    min=100000;
+    for(i=1;i<=3;i++) if(r[i][2]<min) {min=r[i][2]; juc=i;}
+    for(i=1;i<=3;++i)
+    {
+                     if(min==r[i][2])
+                     printf("%c ", i+'A'-1);               
+    }
+    printf("%.0lf \n",min);
+    
+    max=-1;
+    for(i=1;i<=3;i++) if(r[i][6]>max) {max=r[i][6]; juc=i;}
+    for(i=1;i<=3;++i)
+    {
+                     if(max==r[i][6])
+                     printf("%c ", i+'A'-1);               
+    }
+    printf("%.3lf\n",max);
+    
+    max=-1;
+    for(i=1;i<=3;i++) if(r[i][7]>max) {max=r[i][7]; juc=i;}
+    for(i=1;i<=3;++i)
+    {
+                     if(max==r[i][7])
+                     printf("%c ", i+'A'-1);               
+    }
+    printf("%.3lf\n",max);
+    
+    min=100000;
+    for(i=1;i<=3;i++) if(r[i][5]<min) {min=r[i][5]; juc=i;}
+    for(i=1;i<=3;++i)
+    {
+                     if(min==r[i][5])
+                     printf("%c ", i+'A'-1);               
+    }
+    printf("%.0lf\n",min);
+}

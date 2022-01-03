@@ -1,0 +1,79 @@
+#include<fstream>
+#include<iostream>
+using namespace std;
+long fact[1000];
+int main()
+{
+	long nr,l,i,ii,p;
+	bool t,pri;
+	ifstream f("factortrees.in");
+	for(ii=1;ii<=10;ii++)
+	{
+		t=1;l=0;
+		f>>nr;
+		cout<<nr<<'\n';
+		while(t)
+		{
+			for(i=2;i<nr;i++)
+				if(nr%i==0)
+				{
+					fact[l]=i;
+					l++;
+					break;
+				}
+			if(i>=nr)
+			{
+				t=0;//prim
+				//g<<"prim\n\n";
+				l--;pri=0;
+				p=1;
+				while(l>=0)
+				{
+					while((nr==fact[l])&&(l>=0))
+					{
+						l--;
+						p++;
+					}
+					if(pri)
+						cout<<"*";
+					else
+						pri=1;
+					if(p>1)
+						cout<<nr<<"^"<<p;
+					else
+						cout<<nr;
+					if(l>=0)
+					{
+						nr=fact[l];
+						p=1;
+						l--;
+					}
+					else
+						nr=0;
+				}
+				if(nr>0)
+				{
+					if(pri)
+						cout<<"*";
+					else
+						pri=1;
+					if(p>1)
+						cout<<nr<<"^"<<p;
+					else
+						cout<<nr;
+				}
+				cout<<"\n\n";
+			}
+			else
+			{
+				nr=nr/i;
+				cout<<nr;
+				for(i=l-1;i>=0;i--)
+					cout<<"*"<<fact[i];
+				cout<<'\n';
+			}
+		}
+	}
+	f.close();
+	return 0;
+}

@@ -1,0 +1,135 @@
+import java.io.*;
+import java.util.*;
+public class futoshiki
+{
+	private static char[] numbers;	
+	public static boolean isNum(char a)
+	{
+		if(a == '1' || a=='2' ||a=='3'||a=='4'||a=='5')
+			return true;
+		return false;
+	}
+	public static boolean meets(String a, int b)
+	{
+		int[] array = new int[5];
+		for(int x = 0; x < 5; x++)
+			array[x] = Integer.parseInt(a.substring(x,x+1));
+		for(int x = 0; x < 4; x++){
+			if(numbers[b*5+x] == '<'){
+				if(array[x] >= array[x+1])
+					return false;
+			}
+			else if(numbers[b*5+x] == '>'){
+				if(array[x] <= array[x+1])
+					return false;
+			}
+			else if(isNum(numbers[b*5+x])){
+				if(array[x] != (int)numbers[b*5+x]-48)
+					return false;
+			}
+		}
+		if(numbers[b*5+4] == '<'){
+			if(array[4] >= array[3])
+				return false;
+		}
+		else if(numbers[b*5+4] == '>'){
+			if(array[4] <= array[3])
+				return false;
+		}
+		else if(isNum(numbers[b*5+4])){
+			if(array[4] != (int)numbers[b*5+4]-48)
+				return false;
+		}
+		boolean[] used = new boolean[5];
+		for(int x = 0; x < 5; x++)
+			used[array[x]-1] = true;
+		for(int x =0; x < 5; x++)
+			if(!used[x])
+				return false;
+		return true;
+			
+		//last cell
+	}
+	public static void generate(String a)
+	{
+		if(a.length() == 5){
+			for(int x = 0; x < 5; x++)
+				if(meets(a,x))
+					allPos.get(x).add(a);
+		}
+		else{
+			generate(a+"1");
+			generate(a+"2");
+			generate(a+"3");
+			generate(a+"4");
+			generate(a+"5");
+		}		
+	}
+	private static boolean has5(String a)
+	{
+		int[] array = new int[5];
+		for(int x = 0; x < 5; x++)
+			array[x] = Integer.parseInt(a.substring(x,x+1));
+		boolean[] used = new boolean[5];
+		for(int x = 0; x < 5; x++)
+			used[array[x]-1] = true;
+		for(int x = 0; x < 5; x++)
+			if(!used[x])
+				return false;
+		return true;
+	}
+	private static boolean check(String a)
+	{
+		for(int x = 0; x < 5; x++){
+			String temp  = "";
+			for(int e = 0; e < 5; e++)
+				temp += a.substring(x + e*5, x + e*5+1);
+			if(!has5(temp)){
+				//System.out.println(temp);
+				return false;
+			}
+		}
+		return true;
+	}
+	private static ArrayList<ArrayList<String>> allPos;
+	private static ArrayList<String> otherPos;
+	private static String actual="";
+	private static void anotherGenerate(String b, int a)
+	{
+		if(a == 5){
+			if(check(b))
+				actual = b;
+			return;
+		}
+		for(int x = 0; x < allPos.get(a).size(); x++){
+			anotherGenerate(b+allPos.get(a).get(x), a+1);
+		}
+	}
+	public static void main(String[] args) throws Exception
+	{
+		//System.out.println((int)('0'));
+		numbers = new char[25];
+		allPos = new ArrayList<ArrayList<String>>();
+		for(int x = 0; x < 5; x++)
+			allPos.add(new ArrayList<String>());
+		Scanner in = new Scanner(System.in);
+		for(int x = 0; x < 5; x++){
+			String temp = in.nextLine();
+			for(int y = 0; y < 5; y++){
+				numbers[x*5+y] = temp.charAt(y);
+			}
+		}
+		//System.out.println(meets("54321", 0));
+		String printOut = in.nextLine();
+		generate("");
+		//for(int x = 0; x < 5; x++)
+			//for(int y = 0; y < allPos.get(x).size(); y++)
+				//System.out.println(x + " " + allPos.get(x).get(y));
+		anotherGenerate("", 0);
+		StringTokenizer s1 = new StringTokenizer(printOut, ", ");
+		for(int x = 0; x < 10; x++)
+			System.out.println(actual.charAt(Integer.parseInt(s1.nextToken())-1)+"");
+			
+		
+	}
+}

@@ -1,0 +1,95 @@
+import java.io.*;
+import java.util.*;
+
+public class GoFish
+{
+	public static void main(String[] args) throws IOException
+	{
+		BufferedReader kb = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Please enter player A's hand, with cards separated by spaces: ");
+		String a = kb.readLine();
+		System.out.println("Please enter player B's hand, with cards separated by spaces: ");
+		String b = kb.readLine();
+		System.out.println("Please enter the top 10 cards remaining in the deck, separated by spaces: ");
+		String d = kb.readLine();
+		
+		int[] pA = new int[5];
+		int[] pB = new int[5];
+		ArrayList<Integer> deck = new ArrayList<Integer>();
+		for (int i = 0; i < 7; i++)
+		{
+			int c = Integer.parseInt(a.substring(2 * i, 2 * i + 1));
+			if (c == 1)
+				pA[0]++;
+			if (c == 2)
+				pA[1]++;
+			if (c == 3)
+				pA[2]++;
+			if (c == 4)
+				pA[3]++;
+			if (c == 5)
+				pA[4]++;
+		}
+		for (int i = 0; i < 7; i++)
+		{
+			int c = Integer.parseInt(b.substring(2 * i, 2 * i + 1));
+			if (c == 1)
+				pB[0]++;
+			if (c == 2)
+				pB[1]++;
+			if (c == 3)
+				pB[2]++;
+			if (c == 4)
+				pB[3]++;
+			if (c == 5)
+				pB[4]++;
+		}
+		for (int i = 0; i < 10; i++)
+			deck.add(Integer.parseInt(d.substring(2 * i, 2 * i + 1)));
+		
+		for (int i = 0; i < 10; i++)
+		{
+			if (i % 2 == 0)
+				System.out.println("Please enter the card player A will ask: ");
+			else
+				System.out.println("Please enter the card player B will ask: ");
+			int card = Integer.parseInt(kb.readLine());
+			if (i % 2 == 0)
+			{
+				if (pB[card - 1] != 0)
+				{
+					pA[card - 1] += pB[card - 1];
+					pB[card - 1] = 0;
+					pA[card - 1] %= 4;
+					System.out.println(i + 1 + ". " + pA[card - 1]);
+				}
+				else
+				{
+					pA[deck.get(0) - 1]++;
+					pA[deck.get(0) - 1] %= 4;
+					deck.remove(0);
+					System.out.println(i + 1 + ". " + pA[card - 1]);
+				}
+			
+			}
+			else
+			{
+				if (pA[card - 1] != 0)
+				{
+					pB[card - 1] += pA[card - 1];
+					pA[card - 1] = 0;
+					pB[card - 1] %= 4;
+					System.out.println(i + 1 + ". " + pB[card - 1]);
+				}
+				else
+				{
+					pB[deck.get(0) - 1]++;
+					pB[deck.get(0) - 1] %= 4;
+					deck.remove(0);
+					System.out.println(i + 1 + ". " + pB[card - 1]);
+				}
+			}
+		}	
+		
+	}
+}

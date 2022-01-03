@@ -1,0 +1,103 @@
+opcodes = {"LOAD", "STORE", "ADD", "SUB", "MULT", "DIV", "BG", "BE", "BL", "BU", "READ", "PRINT", "DC", "END"}
+
+with open("as7-test.txt") as inp:
+    tests = "".join(inp.readlines())
+    tests = tests.split("\n\n")
+    for i in range(len(tests)):
+        tests[i] = tests[i].split("\n")
+        for j in range(len(tests[i])):
+            tests[i][j] = tests[i][j].split()
+
+    for test_idx, test in enumerate(tests[:10]):
+        inputs = list(map(int, test[0]))
+
+        ops = []
+        for row in test[1:]:
+            if len(row) == 3:
+                ops.append(tuple(row))
+            elif len(row) == 1:
+                ops.append(("", row[0], ""))
+            elif len(row) == 2:
+                if row[0] in opcodes:
+                    ops.append(("", row[0], row[1]))
+                else:
+                    ops.append((row[0], row[1], ""))
+
+        # print(inputs)
+        # for op in ops:
+        #     print(op)
+        marker_map = {}
+        for idx, op in enumerate(ops):
+            if op[0] != "":
+                marker_map[op[0]] = idx
+
+        var_map = {}
+
+        index = 0
+        acc = 0
+        while True:
+            label, opcode, loc = ops[index]
+
+            if opcode == "LOAD":
+                if loc[0] == "=":
+                    acc = int(loc[1:])
+                else:
+                    acc = var_map[loc]
+
+            elif opcode == "STORE":
+                var_map[loc] = acc
+
+            elif opcode == "ADD":
+                if loc[0] == "=":
+                    acc += int(loc[1:])
+                else:
+                    acc += var_map[loc]
+
+            elif opcode == "SUB":
+                if loc[0] == "=":
+                    acc -= int(loc[1:])
+                else:
+                    acc -= var_map[loc]
+
+            elif opcode == "MULT":
+                if loc[0] == "=":
+                    acc *= int(loc[1:])
+                else:
+                    acc *= var_map[loc]
+
+            elif opcode == "DIV":
+                if loc[0] == "=":
+                    acc //= int(loc[1:])
+                else:
+                    acc //= var_map[loc]
+
+            elif opcode == "BG":
+                if acc > 0:
+                    index = marker_map[loc]
+                    continue
+
+            elif opcode == "BE":
+                if acc == 0:
+                    index = marker_map[loc]
+                    continue
+
+            elif opcode == "BL":
+                if acc < 0:
+                    index = marker_map[loc]
+                    continue
+
+            elif opcode == "BU":
+                index = marker_map[loc]
+                continue
+
+            elif opcode == "READ":
+                var_map[loc] = inputs.pop(0)
+
+            elif opcode == "DC":
+                var_map[label] = int(loc)
+
+            elif opcode == "END":
+                print(str(test_idx + 1) + ".", acc)
+                break
+
+            index += 1

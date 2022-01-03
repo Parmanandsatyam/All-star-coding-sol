@@ -1,0 +1,59 @@
+inf = 1e7
+eps = 1/inf
+
+def get_t(px, py, vx, vy, w, h):
+    x_0 = -px/vx if vx else inf
+    x_w = (w-px)/vx if vx else inf
+    y_0 = -py/vy if vy else inf
+    y_h = (h-py)/vy if vy else inf
+    
+    x_t = max(x_0, x_w)
+    y_t = max(y_0, y_h)
+    
+    return min(x_t, y_t)
+    
+def get_v(npx, npy, vx, vy, w, h):
+    xwall = eq(npx, 0) or eq(npx, w)
+    ywall = eq(npy, 0) or eq(npy, h)
+    xax = eq(npx, 0)
+    yax = eq(npy, 0)
+    
+    if xwall and ywall:
+        if eq(xax, yax):
+            vx, vy = -vx, -vy
+        return vy, vx
+    
+    if xwall:
+        return -vx, vy
+        
+    if ywall:
+        return vx, -vy
+
+def ir(x):
+    return int(round(x))
+
+def eq(a,b):
+    return abs(a-b) < eps
+
+f = open('as8-sample.txt','r')
+for tt in range(10):
+    w,h,ix,iy,px,py,k = map(float, f.readline().split())
+    vx, vy = px-ix, py-iy
+    
+    for bb in range(int(k)):
+        t = get_t(px, py, vx, vy, w, h)
+        npx, npy = px + t*vx, py + t*vy
+        
+        vx, vy = get_v(npx, npy, vx, vy, w, h)
+        px, py = npx, npy
+    
+    xwall = eq(px, 0) or eq(px, w)
+    ywall = eq(py, 0) or eq(py, h)
+    
+    print str(tt+1)+'.',
+    if xwall and ywall:
+        print ir(max(px,py))
+    elif xwall:
+        print ir(py)
+    elif ywall:
+        print ir(px)

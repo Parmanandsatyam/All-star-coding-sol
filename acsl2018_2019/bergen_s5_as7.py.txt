@@ -1,0 +1,87 @@
+f = open('as7-sample.txt','r')
+for tt in range(10):
+    inp = list(map(int, f.readline().split()))
+    c = []
+    while True:
+        s = f.readline()
+        if s.strip():
+            c.append(s.split())
+        else:
+            break
+    
+    jmp = {}
+    for i,l in enumerate(c):
+        if len(l) == 3 and l[1] != 'DC':
+            jmp[l[0]] = i
+            
+    ip = 0
+    done = False
+    vs = {}
+    acc = 0
+    
+    def val(v):
+        if v[0] == '=':
+            return int(v[1:])
+        return vs[v]
+    
+    def branch(lbl):
+        global ip
+        global jmp
+        ip = jmp[lbl]
+    
+    def do(op):
+        global ip
+        global acc
+        global done
+        global inp
+        
+        if op[-1] == 'END':
+            done = True
+            return
+        
+        if len(op) == 3:
+            if op[1] == 'DC':
+                vs[op[0]] = int(op[2])
+            else:
+                op = op[1:]
+        
+        if len(op) == 2:
+            if op[0] == 'LOAD':
+                acc = val(op[1])
+            elif op[0] == 'STORE':
+                vs[op[1]] = acc
+            elif op[0] == 'ADD':
+                acc += val(op[1])
+            elif op[0] == 'SUB':
+                acc -= val(op[1])
+            elif op[0] == 'MULT':
+                acc *= val(op[1])
+            elif op[0] == 'DIV':
+                acc = int(1.0*acc/val(op[1])) # ask clarification -5/3 is -2 or -1 ?
+            elif op[0] == 'BG':
+                if acc > 0:
+                    branch(op[1])
+                    return
+            elif op[0] == 'BE':
+                if acc == 0:
+                    branch(op[1])
+                    return
+            elif op[0] == 'BL':
+                if acc < 0:
+                    branch(op[1])
+                    return
+            elif op[0] == 'BU':
+                branch(op[1])
+                return
+            elif op[0] == 'READ':
+                vs[op[1]] = inp[0]
+                inp = inp[1:]
+            elif op[0] == 'PRINT':
+                pass
+        
+        ip += 1
+    
+    while not done:
+        do(c[ip])
+    
+    print str(tt+1)+'. '+str(acc)

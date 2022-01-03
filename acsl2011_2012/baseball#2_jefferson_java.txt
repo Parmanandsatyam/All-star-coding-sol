@@ -1,0 +1,135 @@
+//TJHSST Junior 5
+//Corwin de Boor, Anirudh Ryali, Puneeth Uttla(kiwiluver75), Eric Sun, Rishub Jain
+//Baseball Stats
+import java.io.*;
+import java.util.*;
+
+public class Baseball
+{
+	public static int i(StringTokenizer s){return Integer.parseInt(s.nextToken());}
+	public static double d(StringTokenizer st){return Double.parseDouble(st.nextToken());}
+	public static double round(double d)
+	{
+
+
+		return 1.0 * Math.round(d * 1000)/1000;
+		
+	}
+	public static String fix(double d)
+	{
+		if(d == 1.0)
+			return "1.000";
+		String s = Double.toString(d);
+		s = s.substring(1);
+		
+		while(s.length() < 4)
+		{
+			s += "0";
+		}
+		return s;
+	}
+	public static void main(String[] args)throws Exception
+	{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		double batAv = 0;
+		String batAvst = "";
+		int offAtBats = 1000;
+		String offAtBatsst = "";
+		double slugPer = 0;
+		String slugPerst = "";
+		double onBasePer = 0;
+		String onBasePerst = "";
+		int totBas = 1000;
+		String totBasst = "";
+		
+		for(int i = 0; i < 3; i++)
+		{
+			String play = "";
+			if(i == 0) play = "A";
+			if(i == 1) play = "B";
+			if(i == 2) play = "C";
+			StringTokenizer st = new StringTokenizer(br.readLine(), ", ");
+			int outs = i(st);
+			int sing = i(st);
+			int doub = i(st);
+			int trip = i(st);
+			int hr = i(st);
+			int strout = i(st);
+			int walk = i(st);
+			int hbp = i(st);
+			int sacr = i(st);
+			
+			int totApp = outs + sing + doub + trip + hr + strout + walk + hbp + sacr;
+			int offBat = totApp - walk - hbp - sacr;
+			int totHit = sing + doub + trip + hr;
+			double battAve = (double)totHit/offBat;
+			int totBase = sing + 2 * doub + 3 * trip + 4 * hr;
+			double slugpercen = (double)totBase/offBat;
+			double d = totHit + walk + hbp;
+			double c = offBat + walk + hbp + sacr;
+			double onbasepercen = d/c;
+			
+			battAve = round(battAve);
+			slugpercen = round(slugpercen);
+			onbasepercen = round(onbasepercen);
+			
+			if(battAve == batAv)
+			{
+				if (batAvst.length()!=0) batAvst+=", ";
+				batAvst +=play;
+			}
+			else if(battAve > batAv)
+			{
+				batAv = battAve;
+				batAvst = play;
+			}
+			if(offBat == offAtBats)
+			{
+				if (offAtBatsst.length()!=0) offAtBatsst+=", ";
+				offAtBatsst += (play);
+			}
+			else if(offBat < offAtBats)
+			{
+				offAtBats = offBat;
+				offAtBatsst = play;
+			}
+			if(slugpercen == slugPer)
+			{
+				if (slugPerst.length()!=0)slugPerst+=", ";
+				slugPerst += (play);
+			}
+			else if(slugpercen > slugPer)
+			{
+				slugPer = slugpercen;
+				slugPerst = play;
+			}
+			if(onbasepercen == onBasePer)
+			{
+				if (onBasePerst.length()!=0)onBasePerst+=", ";
+				onBasePerst += (play);
+			}
+			else if(onbasepercen > onBasePer)
+			{
+				onBasePer = onbasepercen;
+				onBasePerst = play;
+			}
+			if(totBase == totBas)
+			{
+				if (totBasst.length()!=0) totBasst+=", ";
+				totBasst += (play);
+			}
+			else if(totBase < totBas)
+			{
+				totBas = totBase;
+				totBasst = play;
+			}
+			
+		}	
+		System.out.println(batAvst + ", " + fix(batAv));
+		System.out.println(offAtBatsst + ", " + offAtBats);
+		System.out.println(slugPerst + ", " + fix(slugPer));
+		System.out.println(onBasePerst + ", " + fix(onBasePer));
+		System.out.println(totBasst + ", " + totBas); 
+		
+	}
+}

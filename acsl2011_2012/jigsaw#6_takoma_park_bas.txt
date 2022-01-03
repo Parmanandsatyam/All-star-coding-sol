@@ -1,0 +1,89 @@
+! Jigsaw
+DIM Array(100)
+FOR x=1 to 100
+    LET Array(x)=x
+NEXT x
+DO
+   INPUT prompt "num? ": temp
+   IF temp<>0 then
+      LET Array(temp)=0
+   END IF
+LOOP while temp<>0
+FOR z=1 to 10
+    LET flag=0
+    LET y=1
+    INPUT prompt "letter? ":ltr$
+    INPUT prompt "rotation? ":rt
+    IF ltr$="A" then
+       IF rt=90 then
+          DO
+             IF Array(y)<>0 and Array(y+10)<>0 then
+                PRINT y
+                LET Array(y)=0
+                LET Array(y+10)=0
+                LET flag=1
+             END IF
+             LET y=y+1
+          LOOP until y>90 or flag=1
+       ELSE
+          DO
+             IF Array(y)<>0 and Array(y+1)<>0 and int(y/10)<>y/10 then
+                PRINT y
+                LET Array(y)=0
+                LET Array(y+1)=0
+                LET flag=1
+             END IF
+             LET y=y+1
+          LOOP until y=99 or flag=1
+       END IF
+    ELSE IF ltr$="B"  and rt=0 or ltr$="D" and rt=90 then
+       DO
+          IF y/10<>int(y/10) and Array(y+11)<>0 and Array(y+10)<>0 and Array(y)<>0 then
+             PRINT y
+             LET Array(y)=0
+             LET Array(y+10)=0
+             LET Array(y+11)=0
+             LET flag=1
+          END IF
+          LET y=y+1
+       LOOP until y>90 or flag=1
+    ELSE IF rt=90 and ltr$="B" or rt=0 and ltr$="C" then
+       DO
+          IF (y-1)/10<>int((y-1)/10) and Array(y+9)<>0 and Array(y+10)<>0 and Array(y)<>0 then
+             PRINT y
+             LET Array(y)=0
+             LET Array(y+10)=0
+             LET Array(y+9)=0
+             LET flag=1
+          END IF
+          LET y=y+1
+       LOOP until y>90 or flag=1
+    ELSE IF rt=180 and ltr$="B" or rt=90 and ltr$="C" or rt=180 and ltr$="D" then
+       DO
+          IF y/10<>int(y/10) and Array(y+11)<>0 and Array(y+1)<>0 and Array(y)<>0 then
+             PRINT y
+             LET Array(y)=0
+             LET Array(y+11)=0
+             LET Array(y+1)=0
+             LET flag=1
+          END IF
+          LET y=y+1
+       LOOP until y>90 or flag=1
+    ELSE IF rt=180 and ltr$="C" or rt=0 and ltr$="D" then
+       DO
+          IF y/10<>int(y/10) and Array(y+10)<>0 and Array(y+1)<>0 and Array(y)<>0 then
+             PRINT y
+             LET Array(y)=0
+             LET Array(y+10)=0
+             LET Array(y+1)=0
+             LET flag=1
+          END IF
+          LET y=y+1
+       LOOP until y>90 or flag=1
+    END IF
+    IF flag=0 then
+       PRINT "NONE"
+    END IF
+NEXT z
+END
+

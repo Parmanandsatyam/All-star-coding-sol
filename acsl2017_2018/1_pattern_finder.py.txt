@@ -1,0 +1,35 @@
+filename = "as1-test.txt"
+inp = ""
+with open(filename) as f:
+    inp = f.readlines()
+
+
+#print(inp)
+arr = []
+for i in inp[0].split():
+    arr.append(list(bin(int(i,16))[2:].zfill(8)))
+#print(arr)
+
+for line in inp[1:]:
+    try:
+        count = 0
+        ls = line.split()
+        rows = int(ls[0])
+        cols = int(ls[1])
+        if rows<=0 or cols<=0:
+            raise
+        a = ls[2:]
+        for i in range(9-rows):
+            for j in range(9-cols):
+                yep = 1
+                for k in range(rows):
+                    for l in range(cols):
+                        if a[k][l]!=arr[i+k][j+l]:
+                            yep = 0
+                if yep:
+                    count+=1
+        print(count)
+    except:
+        print(0)
+
+input("Hit enter to end: ")

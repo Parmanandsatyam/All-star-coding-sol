@@ -1,0 +1,36 @@
+f = open("as5-sample.txt")
+g = []
+for i in f:
+    while i[-1] in ' \t\n':
+        i = i[:-1]
+    g.append(i.split(' '))
+for aaa in range(len(g)):
+    g[aaa] = [int(g[aaa][0]), int(g[aaa][1]), int(g[aaa][2])]
+
+maxm = 0
+for aaaa in g:
+    if aaaa[0] > maxm: maxm = aaaa[0]
+
+generated = ['']
+for i in range(maxm):
+    if i == 0: generated.append('1')
+    else:
+        answer = ''
+        thonk = generated[i]
+        prev = thonk[0]
+        wide = 1
+        for j in range(1, len(thonk)):
+            if thonk[j] == prev: wide += 1
+            else:
+                answer += (str(wide) + prev)
+                prev = thonk[j]
+                wide = 1
+        answer += (str(wide) + prev)
+        generated.append(answer)
+
+for aaaaa in g:
+    try:
+        hehexd = generated[aaaaa[0]]
+        print (hehexd[aaaaa[1] - 1: aaaaa[1] + aaaaa[2]])
+    except:
+        print ('1')

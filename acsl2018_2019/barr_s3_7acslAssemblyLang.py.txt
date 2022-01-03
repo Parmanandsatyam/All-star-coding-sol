@@ -1,0 +1,128 @@
+def actualValues(line):
+    lineArr = []
+    currentStr = ""
+    for ind in range(len(line)):
+        if line[ind] != " ":
+            currentStr += line[ind]
+        elif len(currentStr) > 0:
+            lineArr.append(currentStr)
+            currentStr = ""
+    if len(currentStr) > 0:
+        lineArr.append(currentStr)
+    return lineArr
+
+def locValue(value, var):
+    if "=" in value:
+        return int(value[1:])
+    else:
+        return var[value]
+
+with open("as7-test.txt") as f:
+    myList = [line.rstrip('\n') for line in f]
+    start = 0
+    end = -1
+    for k in range(len(myList)):
+        myList[k] = myList[k].replace("\t", " ")
+        myList[k] = actualValues(myList[k])
+
+    inputList = []
+    currentInput = []
+    for index in range(len(myList)):
+        if myList[index] != []: #not just a new line
+            currentInput.append(myList[index])
+        else: #if it's just []
+            inputList.append(currentInput)
+            currentInput = []
+    if len(currentInput) > 0:
+        inputList.append(currentInput)
+    myList = inputList
+
+oldIndex = 1
+for instructions in myList:
+    try:
+        variables = {}
+        labels = {}
+        acc = 0
+        newIndex = -1
+        end = False
+        readValues = instructions[0]
+        for index in range(len(instructions)):
+            lin = instructions[index]
+            if len(lin) == 3:
+                if lin[1] == "DC":
+                    variables[lin[0]] = int(lin[2])
+                else:
+                    labels[lin[0]] = index
+                    del lin[0]
+            elif len(lin) > 1 and "END" in lin:
+                labels[lin[0]] = index
+                del lin[0]
+        currentRead = 0
+        while not end:
+            currentLine = instructions[oldIndex]
+            if "DC" in currentLine:
+                newIndex = oldIndex + 1
+            elif "READ" in currentLine:
+                variables[currentLine[1]] = int(readValues[currentRead])
+                currentRead += 1
+                newIndex = oldIndex + 1
+            elif "LOAD" in currentLine:
+                acc = locValue(currentLine[1], variables)
+                newIndex = oldIndex + 1
+            elif "STORE" in currentLine:
+                variables[currentLine[1]] = acc
+                newIndex = oldIndex + 1
+            elif "ADD" in currentLine:
+                acc += locValue(currentLine[1], variables)
+                newIndex = oldIndex + 1
+                if acc > 1000000:
+                    acc = acc % 1000000
+            elif "SUB" in currentLine:
+                acc -= locValue(currentLine[1], variables)
+                newIndex = oldIndex + 1
+                if acc > 1000000:
+                    acc = acc % 1000000
+            elif "MULT" in currentLine:
+                acc *= locValue(currentLine[1], variables)
+                newIndex = oldIndex + 1
+                if acc > 1000000:
+                    acc = acc % 1000000
+            elif "DIV" in currentLine:
+                if acc % locValue(currentLine[1], variables) == 0:
+                    acc /= locValue(currentLine[1], variables)
+                elif acc / locValue(currentLine[1], variables) < 0:
+                    acc = (acc // locValue(currentLine[1], variables)) + 1
+                else:
+                    acc = acc // locValue(currentLine[1], variables)
+                newIndex = oldIndex + 1
+            elif "BG" in currentLine:
+                if acc > 0:
+                    newIndex = labels[currentLine[1]]
+                else:
+                    newIndex = oldIndex + 1
+            elif "BE" in currentLine:
+                if acc == 0:
+                    newIndex = labels[currentLine[1]]
+                else:
+                    newIndex = oldIndex + 1
+            elif "BL" in currentLine:
+                if acc < 0:
+                    newIndex = labels[currentLine[1]]
+                else:
+                    newIndex = oldIndex + 1
+            elif "BU" in currentLine:
+                newIndex = labels[currentLine[1]]
+            elif "PRINT" in currentLine:
+                newIndex = oldIndex + 1
+            elif "END" in currentLine:
+                newIndex = 1
+                end = True
+            oldIndex = newIndex
+        print(int(acc))
+    except:
+        print("0")
+
+""" for i in range(2):
+        currentLine = 0
+        instructionsArr = []
+"""

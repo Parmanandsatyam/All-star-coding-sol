@@ -1,0 +1,114 @@
+def check_grid_temp(g, new_r, new_c):
+    check_row = "".join(g[new_r])
+    check_col = "".join(g[r_idx][new_c] for r_idx in range(len(g)))
+
+    if "XXX" in check_row or "OOO" in check_row or "XXX" in check_col or "OOO" in check_col:
+        return False
+
+    if check_row.count("X") > len(g) // 2 or check_row.count("O") > len(g) // 2 or \
+        check_col.count("X") > len(g) // 2 or check_col.count("O") > len(g) // 2:
+        return False
+
+    return True
+
+
+def check_grid(g):
+    rows = ["".join(r) for r in g]
+    cols = ["".join(r[idx] for r in g) for idx in range(len(g[0]))]
+
+    for line in rows + cols:
+        if "XXX" in line or "OOO" in line:
+            return False
+        if line.count("X") > len(g) // 2 or line.count("O") > len(g) // 2:
+            return False
+
+    if len(set(rows)) != len(rows) or len(set(cols)) != len(cols):
+        return False
+
+    return True
+
+
+def find_empty_spot(g):
+    for row_idx in range(len(g)):
+        for col_idx in range(len(g[0])):
+            if g[row_idx][col_idx] == "_":
+                return row_idx, col_idx
+    return -1, -1
+
+
+def solve(g):
+    empty_row, empty_col = find_empty_spot(g)
+    if empty_row == -1:
+        return check_grid(g)
+
+    # print()
+    # for row in grid:
+    #     print(row)
+    # print()
+    for xo in "XO":
+        g[empty_row][empty_col] = xo
+        if not check_grid_temp(g, empty_row, empty_col):
+            g[empty_row][empty_col] = "_"
+            continue
+
+        if solve(g):
+            return True
+
+        g[empty_row][empty_col] = "_"
+
+    return False
+
+# g = [list("XOOXOXXOOX"),
+#      list("OXOOXOXXOX"),
+#      list("XOXOXOOXXO"),
+#      list("OXOXOXXOOX"),
+#      list("OXXOXOXOXO"),
+#      list("XOXOOXOXXO"),
+#      list("XOOXXOOXOX"),
+#      list("OXOXOOXOXX"),
+#      list("OXXOXXOOXO"),
+#      list("XOXXOXOXOO")]
+# print(check_grid(g, True))
+# input()
+
+
+with open("as6-test.txt") as inp:
+    tests = inp.read().splitlines()
+    for test_idx, test in enumerate(tests):
+        grid_size, grid_info = test.split(" ")
+        grid_size = int(grid_size)
+
+        grid = [["" for _ in range(grid_size)] for _ in range(grid_size)]
+        grid_info = grid_info.replace("X", " X ").replace("O", " O ")
+        grid_info = grid_info.split()
+        # print(grid_size, grid_info)
+
+        idx = 0
+        for info in grid_info:
+            if info == "O" or info == "X":
+                row, col = idx // grid_size, idx % grid_size
+                grid[row][col] = info
+                idx += 1
+            else:
+                for _ in range(int(info)):
+                    row, col = idx // grid_size, idx % grid_size
+                    grid[row][col] = "_"
+                    idx += 1
+
+        # for row in grid:
+        #     print(row)
+
+        # print()
+
+        solve(grid)
+        # for row in grid:
+        #     print(row)
+
+        out = ""
+        for i in range(len(grid)):
+            out += grid[i][i]
+        out = out.replace("X", "1").replace("O", "0")
+        out_i = int(out, 2)
+        print(f"{test_idx+1}.", hex(out_i)[2:].upper())
+
+        # print("------")

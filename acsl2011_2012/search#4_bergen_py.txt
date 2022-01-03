@@ -1,0 +1,53 @@
+import re
+
+
+
+def works(regex, string):
+    ampPos = regex.find("&")
+    if ampPos != -1:
+        return (works(regex[0:ampPos], string) and works(regex[ampPos + 1:], string))
+    plusPos = regex.find("+")
+    if plusPos != -1:
+        return works(regex[0:plusPos], string) or works(regex[plusPos + 1:], string)
+    regex = regex.replace("?", "\w")
+    starPos = regex.find("*")
+    if starPos == 0 or (starPos == (len(string)-1)):
+        regex = regex.replace("*", "")
+    regex = regex.replace("*", "[a-zA-Z_]*")
+    if regex.find("[") != -1:
+        #position must be 0
+        #get all matches
+        p = re.compile("^" + regex[1:])
+        found = False
+        for l in p.finditer(string):
+            if l.start() == 0:
+                found = True
+        if not found:
+            return False
+        regex = regex[1:]
+    if regex.find("]") != -1:
+        p = re.compile(regex[:-1] + "$")
+        found = False
+        for l in p.finditer(string):
+            if l.end() == len(string):
+                found = True
+        if not found:
+            return False
+        regex = regex[:-1]
+    p = re.compile(regex)
+    return ( len(p.findall(string)) > 0 )
+
+sample = raw_input().split()
+
+for i in range(10):
+    string = raw_input()
+    for l in sample:
+        if works(string, l):
+            print l,
+    print ""
+
+#sample = ["BLUE_BELLS", "TELLS", "FALLS", "BARBIE_DOLLS", "DULLS", "DOLLIES", "SELL", "BELLIES", "TELLY", "DELL"]
+
+##for l in sample:
+##    if works(string, l):
+##        print l

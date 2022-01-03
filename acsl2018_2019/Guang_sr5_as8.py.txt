@@ -1,0 +1,150 @@
+lines = open("as8-test.txt","r").read().strip().split("\n")
+
+
+def r(num):
+    return round(num + 0.0001)
+def find_next(width, length, ax, ay, bx, by):
+    
+    if bx not in (0, width) and by in (0, length):#top bottom 
+        #ends in left right
+        dx = abs(bx - ax)
+        dy = by - ay
+        if bx > ax:#right
+            sx = bx - width
+            sy = abs(sx) * dy / dx
+        elif bx < ax:
+            sx = bx
+            sy = abs(sx) * dy / dx
+        else:
+            sx = 0
+            sy = length
+        nx, ny = bx - sx, by - sy
+        if ny < 0:
+            #bot
+            chy = 0 - ny
+            day = by + chy
+            chx = abs(sx * chy / day)
+            ny = 0
+            if sx < 0:
+                nx = width - chx
+            else:
+                nx = chx
+        elif ny > length:
+            chy = ny - length
+            day = chy + (length - by)
+            chx = abs(sx * chy / day)
+            ny = length
+            if sx < 0:
+                nx = width - chx
+            else:
+                nx = chx
+        return (nx, ny)
+    elif bx in (0, width) and by not in (0, length):#left right
+        #ends in top left
+        dx = bx - ax
+        dy = abs(by - ay)
+        if by > ay:# top
+            sy = by - length
+            sx = abs(sy) * dx / dy
+        elif by < ay:
+            sy = by
+            sx = abs(sy) * dx / dy
+        else:
+            sy = 0
+            sx = width
+        nx, ny = bx - sx, by - sy
+        if nx < 0:
+            chx = 0 - nx
+            dax = bx + chx
+            chy = abs(sy * chx / dax)
+            nx = 0
+            if sy < 0:
+                ny = length - chy
+            else:
+                ny = chy
+        elif nx > width:
+            #print(111)
+            #print(nx)
+            chx = nx - width
+            dax = chx + width - bx
+            #print(chx, dax, sx)
+            chy = abs(sy * chx / dax)
+            nx = width
+            if sy < 0:
+                ny = length - chy
+            else:
+                ny = chy
+        return (nx, ny)
+    elif bx in (0, width) and by in (0, length):
+        dx = abs(bx - ax)
+        dy = abs(by - ay)
+        # dx/dy = dy/dx
+        #jia she quanbu left right
+        if bx == width:
+            #print(11)
+            nx = 0
+            #print(dx, dy)
+            sy = abs(width * dx / dy)
+            #print(sy, dx/dy)
+            if by == length:
+                ny = length - sy
+            else:
+                ny = sy
+        else:
+            nx = width
+            sy = abs(width * dx / dy)
+            if by == length:
+                ny = length - sy
+            else:
+                ny = sy
+        #########
+        
+        if ny < 0:
+            #bot
+            #nx = 0
+            chy = 0 - ny
+            day = length + chy
+            chx = abs(width * chy / day)
+            ny = 0
+            if bx == width:
+                nx = chx
+            else:
+                nx = width - chx
+            #print(nx)
+            return (nx, ny)
+        elif ny > length:
+            #dprint(111)
+            #nx = 0
+            chy = ny - length
+            day = chy + length
+            #print(chy, day)
+            chx = abs(width * chy / day)
+            #print(chx)
+            ny = length
+            if bx == width:
+                #print(111)
+                nx = chx
+            else:
+                nx = width - chx
+            
+            return (nx, ny)
+        return (nx, ny)
+#print(find_next(20,15,15,12,20,0))
+for i in range(10):
+    try:
+        l = list(map(int, lines[i].strip().split()))
+        width, length = l[0], l[1]
+        ax, ay, bx, by = l[2],l[3],l[4],l[5]
+        k = l[6]
+        for j in range(k-1):
+            nnn = find_next(width, length, ax,ay, bx, by)
+            ax, ay, bx, by = bx, by, nnn[0], nnn[1]
+        #print(bx, by)
+        if r(bx) in (0, width) and r(by) not in (0, length):
+            print(str(i + 1)+". "+str(r(by)))
+        elif r(by) in (0, length) and r(bx) not in (0, width):
+            print(str(i + 1)+". "+str(r(bx)))
+        else:
+            print(str(i + 1)+". "+str(r(max(bx,by))))
+    except:
+        print("error")

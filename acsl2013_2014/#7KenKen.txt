@@ -1,0 +1,230 @@
+import java.util.*;
+import java.io.*;
+
+public class Kenken {
+
+	public static void main(String[] args) throws FileNotFoundException
+	{
+		Scanner scan = new Scanner(new File("KENKENINPUT"));
+		
+		int[][] threethreeone = {{1,2,3},{2,3,1},{3,1,2}};
+		int[][] threethreeoneA = {{1,2,3},{3,1,2},{2,3,1}};
+		int[][] threethreetwo = {{1,3,2},{2,1,3},{3,2,1}};
+		int[][] threethreetwoA = {{1,3,2},{3,2,1},{2,1,3}};
+		int[][] threethreethree = {{2,1,3},{3,2,1},{1,3,2}};
+		int[][] threethreethreeA = {{2,1,3},{1,3,2},{3,2,1}};
+		int[][] threethreefour = {{2,3,1},{3,2,1},{1,3,2}};
+		int[][] threethreefourA = {{2,3,1},{1,3,2},{3,2,1}};
+		int[][] threethreefive = {{3,1,2},{1,2,3},{2,3,1}};
+		int[][] threethreefiveA = {{3,1,2},{2,3,1},{1,2,3}};
+		int[][] threethreesix = {{3,2,1},{2,1,3},{1,3,2}};
+		int[][] threethreesixA = {{3,2,1},{1,3,2},{2,1,3}};
+		
+		
+		String[] rules = scan.nextLine().split(", ");
+		String[] cells = scan.nextLine().split(", ");
+		
+		if(checkValid(threethreeone, rules, 3))
+			print(threethreeone, cells, 3);
+		if(checkValid(threethreetwo, rules, 3))
+			print(threethreetwo, cells, 3);
+		if(checkValid(threethreethree, rules, 3))
+			print(threethreethree, cells, 3);
+		if(checkValid(threethreefour, rules, 3))
+			print(threethreefour, cells, 3);
+		if(checkValid(threethreefive, rules, 3))
+			print(threethreefive, cells, 3);
+		if(checkValid(threethreesix, rules, 3))
+			print(threethreesix, cells, 3);
+		if(checkValid(threethreeoneA, rules, 3))
+			print(threethreeoneA, cells, 3);
+		if(checkValid(threethreetwoA, rules, 3))
+			print(threethreetwoA, cells, 3);
+		if(checkValid(threethreethreeA, rules, 3))
+			print(threethreethreeA, cells, 3);
+		if(checkValid(threethreefourA, rules, 3))
+			print(threethreefourA, cells, 3);
+		if(checkValid(threethreefiveA, rules, 3))
+			print(threethreefiveA, cells, 3);
+		if(checkValid(threethreesixA, rules, 3))
+			print(threethreesixA, cells, 3);
+		
+		
+		int[][] fourfourone = {{1,2,3,4},{2,3,4,1},{3,4,1,2},{4,1,2,3}};
+		int[][] fourfourtwo = {{1,2,4,3},{2,3,1,4},{3,4,2,1},{4,1,3,2}};
+		int[][] fourfourthree = {{1,3,2,4},{2,4,3,1},{3,1,4,2},{4,2,1,3}};
+		int[][] fourfourfour = {{1,3,4,2},{2,4,1,3},{3,1,2,4},{4,2,3,1}};
+		int[][] fourfourfive = {{1,4,2,3},{2,1,3,4},{3,2,4,1},{4,3,1,2}};
+		int[][] fourfoursix = {{1,4,3,2},{2,1,4,3},{3,2,1,4},{4,3,2,1}};
+			int[][] fourfourseven = {{2,3,4,1},{3,4,1,2},{4,1,2,3},{1,2,3,4}};
+			int[][] fourfoureight = {{2,3,1,4},{3,4,2,1},{4,1,3,2},{1,2,4,3}};
+			int[][] fourfournine = {{2,4,3,1},{3,1,4,2},{4,2,1,3},{1,3,2,4}};
+			int[][] fourfourten = {{2,4,1,3},{3,1,2,4},{4,2,3,1},{1,3,4,2}};
+			int[][] fourfoureleven = {{2,1,3,4},{3,2,4,1},{4,3,1,2},{1,4,2,3}};
+			int[][] fourfourtwelve = {{2,1,4,3},{3,2,1,4},{4,3,2,1},{1,4,3,2}};
+		int[][] fourfourthirteen = {{3,4,1,2},{4,1,2,3},{1,2,3,4},{2,3,4,1}};
+		int[][] fourfourfourteen = {{3,4,2,1},{4,1,3,2},{1,2,4,3},{2,3,1,4}};
+		int[][] fourfourfifteen = {{3,1,4,2},{4,2,1,3},{1,3,2,4},{2,4,3,1}};
+		int[][] fourfoursixteen = {{3,1,2,4},{4,2,3,1},{1,3,4,2},{2,4,1,3}};
+		int[][] fourfourseventeen = {{3,2,4,1},{4,3,1,2},{1,4,2,3},{2,1,3,4}};
+		int[][] fourfoureighteen = {{3,2,1,4},{4,3,2,1},{1,4,3,2},{2,1,4,3}};
+			int[][] fourfournineteen = {{4,1,2,3},{1,2,3,4},{2,3,4,1},{3,4,1,2}};
+			int[][] fourfourtwenty = {{4,1,3,2},{1,2,4,3},{2,3,1,4},{3,4,2,1}};
+			int[][] fourfourtwentyone = {{4,2,1,3},{1,3,2,4},{2,4,3,1},{3,1,4,2}};
+			int[][] fourfourtwentytwo = {{4,2,3,1},{1,3,4,2},{2,4,1,3},{3,1,2,4}};
+			int[][] fourfourtwentythree = {{4,3,1,2},{1,4,2,3},{2,1,3,4},{3,2,4,1}};
+			int[][] fourfourtwentyfour = {{4,3,2,1},{1,4,3,2},{2,1,4,3},{3,2,1,4}};
+		
+		String[] rulesfour = scan.nextLine().split(", ");
+		String[] cellsfour = scan.nextLine().split(", ");
+		
+		if(checkValid(fourfourone, rulesfour, 4))
+			print(fourfourone, cellsfour, 4);
+		
+		if(checkValid(fourfourtwo, rulesfour, 4))
+			print(fourfourtwo, cellsfour, 4);
+		
+		if(checkValid(fourfourthree, rulesfour, 4))
+			print(fourfourthree, cellsfour, 4);
+		
+		if(checkValid(fourfourfour, rulesfour, 4))
+			print(fourfourfour, cellsfour, 4);
+		
+		if(checkValid(fourfourfive, rulesfour, 4))
+			print(fourfourfive, cellsfour, 4);
+		
+		if(checkValid(fourfoursix, rulesfour, 4))
+			print(fourfoursix, cellsfour, 4);
+		
+		if(checkValid(fourfourseven, rulesfour, 4))
+			print(fourfourseven, cellsfour, 4);
+		
+		if(checkValid(fourfoureight, rulesfour, 4))
+			print(fourfoureight, cellsfour, 4);
+		
+		if(checkValid(fourfournine, rulesfour, 4))
+			print(fourfournine, cellsfour, 4);
+		
+		if(checkValid(fourfourten, rulesfour, 4))
+			print(fourfourten, cellsfour, 4);
+		
+		if(checkValid(fourfoureleven, rulesfour, 4))
+			print(fourfoureleven, cellsfour, 4);
+		
+		if(checkValid(fourfourtwelve, rulesfour, 4))
+			print(fourfourtwelve, cellsfour, 4);	
+		
+		if(checkValid(fourfourthirteen, rulesfour, 4))
+			print(fourfourthirteen, cellsfour, 4);
+		
+		if(checkValid(fourfourfourteen, rulesfour, 4))
+			print(fourfourfourteen, cellsfour, 4);
+		
+		if(checkValid(fourfourfifteen, rulesfour, 4))
+			print(fourfourfifteen, cellsfour, 4);
+		
+		if(checkValid(fourfoursixteen, rulesfour, 4))
+			print(fourfoursixteen, cellsfour, 4);
+		
+		if(checkValid(fourfourseventeen, rulesfour, 4))
+			print(fourfourseventeen, cellsfour, 4);
+		
+		if(checkValid(fourfoureighteen, rulesfour, 4))
+			print(fourfoureighteen, cellsfour, 4);
+		
+		if(checkValid(fourfournineteen, rulesfour, 4))
+			print(fourfournineteen, cellsfour, 4);
+		
+		if(checkValid(fourfourtwenty, rulesfour, 4))
+			print(fourfourtwenty, cellsfour, 4);
+		
+		if(checkValid(fourfourtwentyone, rulesfour, 4))
+			print(fourfourtwentyone, cellsfour, 4);
+		
+		if(checkValid(fourfourtwentytwo, rulesfour, 4))
+			print(fourfourtwentytwo, cellsfour, 4);
+		
+		if(checkValid(fourfourtwentythree, rulesfour, 4))
+			print(fourfourtwentythree, cellsfour, 4);
+		
+		if(checkValid(fourfourtwentyfour, rulesfour, 4))
+			print(fourfourtwentyfour, cellsfour, 4);
+		
+		
+					
+	}
+	
+	public static boolean checkValid(int[][] board, String[] rules, int n)
+	{
+		int x = 1; 
+		int xHold = 1;
+		for(int i = 0; i < rules.length; i++)
+		{
+			
+			int amtSec = Integer.parseInt(rules[0]);
+			
+			for(int j = 0; j < amtSec; j++)
+			{
+				while(!rules[x].contains("+") && !rules[x].contains("#"))
+					x++;
+				
+				String sumTo = rules[x];
+				sumTo = sumTo.substring(0,1);
+				int sum = Integer.parseInt(sumTo);
+				int[]cTs = new int[n * n];
+				int q = 0; 	
+				for(;xHold < x; xHold++)
+				{
+					
+					cTs[q] = Integer.parseInt(rules[xHold]);
+					q++;
+					
+				}
+				
+				int total = 0; 
+				for(int w = 0; w < cTs.length; w++)
+				{
+					//put in find # in cell
+					if(cTs[w] != 0)
+					{
+						int row = cTs[w]/n;
+						if(cTs[w] % n == 0)
+							row--;
+						
+						int col = cTs[w]%n - 1;
+						if(col == -1)
+							col = n - 1;
+						int num = board[row][col];
+						
+						total += num;
+					}
+				}	
+				if(total != sum)
+					return false;
+				x++;
+				xHold++;
+			}
+			return true;
+		}
+		return false;
+		
+	}
+	
+	public static void print(int[][] board, String[] rules, int n)
+	{
+		for(int i = 0; i < rules.length; i ++)
+		{
+			int cell = Integer.parseInt(rules[i]);
+			
+			int row = cell/n;
+			if(cell % n == 0)
+				row--;
+			
+			int col = cell%n - 1;
+			if(col == -1)
+				col = n - 1;
+			
+			System.out.println(board[row][col]);
+		}
+	}
+}

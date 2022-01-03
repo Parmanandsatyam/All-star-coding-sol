@@ -1,0 +1,41 @@
+filename = "as3-test.txt"
+inp = ""
+with open(filename) as f:
+    inp = f.readlines()
+
+
+for line in inp:
+    try:
+        ls = line.upper().split()
+        start = list(ls[0])
+        start[1] = int("".join(start[1:]))
+        s = list(map(int,ls[1]))
+        for i in s:
+            #print(i,start,end=" ")
+            start0=start[0]
+            start1=start[1]
+            if i==1:
+                start[0] = chr(ord(start0))
+                start[1] = start1+1
+            if i==2 and ord(start0)<90:
+                start[0] = chr(ord(start0)+1)
+                start[1] = start1+(ord(start0)%2)
+            if i==3 and start1-((ord(start0)+1)%2)>=1 and ord(start0)<90:
+                start[0] = chr(ord(start0)+1)
+                start[1] = start1-((ord(start0)+1)%2)
+            if i==4:
+                start[0] = chr(ord(start0))
+                start[1] = max(1,start1-1)
+            if i==5 and start1-((ord(start0)+1)%2)>=1 and ord(start0)>=66: ##
+                start[0] = chr(ord(start0)-1)
+                start[1] = start1-((ord(start0)+1)%2)
+            if i==6 and ord(start0)>=66:
+                start[0] = chr(ord(start0)-1)
+                start[1] = start1+(ord(start0)%2)
+            #print(i,start)
+        print(start[0]+str(start[1]))
+    except Exception as e:
+        #print("crud",e)
+        print("A7")
+
+input("Hit enter to end: ")

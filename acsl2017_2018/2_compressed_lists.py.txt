@@ -1,0 +1,55 @@
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+f = open("as2-test.txt", "r")
+
+def findFreqs(inputString, alphabet):
+    freqArray = []
+    for i in alphabet:
+        if inputString.count(i) > 0:
+            freqArray.append([inputString.count(i), i])
+    freqArray.sort()
+    return freqArray
+
+def checkFreqs(freqArray, theFreq, output, alphabet):
+    sortedOutput = ""
+    for i in freqArray:
+        if i[0] == theFreq:
+            output += i[1]
+    for i in alphabet:
+        if i in output:
+            sortedOutput += i
+    return sortedOutput
+        
+def combStrings(freqArray, alphabet):
+    sortedString = ""
+    newFrequency = freqArray[0][0] + freqArray[1][0]
+    newString = freqArray[0][1] + freqArray[1][1]
+    for i in alphabet:
+        if i in newString:
+            sortedString += i
+    freqArray = freqArray[2:]
+    freqArray.append([newFrequency, sortedString])
+    freqArray.sort()
+    return freqArray
+
+
+for line in f:
+    try:
+        if line.strip() != "":
+            inputString = line.split()[0].upper()
+            theFreq = int(line.split()[1])
+            freqArray = findFreqs(inputString, alphabet)
+            output = checkFreqs(freqArray, theFreq, "", alphabet)
+            while len(freqArray) > 1:
+                freqArray = combStrings(freqArray, alphabet)
+                output = checkFreqs(freqArray, theFreq, output, alphabet)
+            if output == "":
+                output = "NONE"
+            print(output)
+    except:
+        print("NONE")
+            
+f.close()
+
+print()
+input("Have a nice day! Press ENTER to exit.")

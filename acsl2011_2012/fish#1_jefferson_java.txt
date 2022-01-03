@@ -1,0 +1,69 @@
+//TJHSST Junior 5
+//Corwin de Boor, Eric Sun, Puneeth Uttla, Rishub Jain, Anirudh Ryali
+//Go Fish Junior
+   import java.io.*;
+   import java.util.*;
+
+   public class fish
+   {
+      public static int i(StringTokenizer st){ 
+         return Integer.parseInt(st.nextToken());}
+      public static void main(String[] args)throws Exception	
+      {
+         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      
+         StringTokenizer st = new StringTokenizer(br.readLine(), ", ");
+         ArrayList<Integer> opp = new ArrayList<Integer>();
+         for(int i = 0; i < 7; i++)
+            opp.add(i(st));
+      
+         st = new StringTokenizer(br.readLine(), ", ");
+         ArrayList<Integer> play = new ArrayList<Integer>();
+         for(int i = 0; i < 7; i++)
+            play.add(i(st));
+      
+         st = new StringTokenizer(br.readLine(), ", ");
+         Queue<Integer> q = new LinkedList<Integer>();
+         for(int i = 0; i < 5; i++)
+            q.offer(i(st));
+      
+      
+         for(int l = 0; l < 5; l++)	
+         {
+            int num = Integer.parseInt(br.readLine());
+            int fo = find(opp, num);
+            if(fo > 0)	{
+               for(int i = 0; i < fo; i++)
+                  play.add(num);
+               opp = rem(opp, num);
+            
+               if(find(play, num) >= 4) play = rem(play, num);
+            }
+            else	
+            {
+               int lk = q.poll();
+               play.add(lk);
+               if(find(play, lk) >= 4) play = rem(play, lk);
+            }
+         
+            System.out.println(find(play, num));
+         
+         }
+      }
+      public static int find(ArrayList<Integer> list , int num)	
+      {
+         int count = 0;
+         for (int i : list)
+            if(i == num) count++;
+         return count;
+      }
+      public static ArrayList<Integer> rem(ArrayList<Integer> list, int num)	
+      {
+         ArrayList<Integer> temp = new ArrayList<Integer>();
+         for(int i : list)
+         {
+            if(i != num) temp.add(i);
+         }
+         return temp;
+      }
+   }

@@ -1,0 +1,49 @@
+(*Problem C*)
+
+
+uses crt;
+var
+  card:array[-1..1,1..5] of longint;
+  deck:array[1..10] of longint;
+  x,aa,bb,top,r:longint;
+begin
+  for aa:= -1 to 1 do begin
+      for bb:= 1 to 5 do begin
+          card[aa,bb]:=0;
+      end;
+  end;
+  for aa:= 1 to 7 do begin
+      read(x);
+      inc(card[1,x]);
+  end;
+  readln;
+
+  for aa:= 1 to 7 do begin
+      read(x);
+      inc(card[-1,x]);
+  end;
+  readln;
+  top:=1;
+  for aa:= 1 to 10 do begin
+      read(deck[aa]);
+  end;
+  readln;
+  r:=1;
+  for aa:= 1 to 10 do begin
+     readln(x);
+     if card[-r,x] > 0 then begin
+        card[r,x]:=card[r,x] + card[-r,x];
+        card[-r,x]:=0;
+     end
+     else begin
+          inc(card[r,deck[top]]);
+          inc(top);
+     end;
+     if card[r,x] >= 4 then
+        card[r,x]:=card[r,x]-4;
+     writeln(card[r,x]);
+     r:=-r;
+  end;
+  readln;
+  readln;
+end.

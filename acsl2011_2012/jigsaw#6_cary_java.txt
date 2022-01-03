@@ -1,0 +1,207 @@
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
+public class jigsaw 
+{
+	static boolean[][] grid = new boolean[10][10];
+	
+	public static void main(String[] args) 
+	{
+		int r = 0;
+		loadGrid();
+		for (int i = 0; i < 10; i++)
+		{
+			int a = checkShit();
+			switch(a)
+			{
+				case 1: r=check1();
+				break;
+				case 2: r=check2();
+				break;
+				case 3: r=check1();
+				break;
+				case 4: r=check3();
+				break;
+				case 5: r=check4();
+				break;
+				case 6: r=check5();
+				break;
+				case 7: r=check4();
+				break;
+				case 8: r=check5();
+				break;
+				case 9: r=check6();
+				break;
+				case 10: r=check6();
+				break;
+				case 11: r=check3();
+				break;
+				case 12: r=check5();
+				break;
+			}
+			if (r == 0)
+				System.out.println("NONE");
+			else
+				System.out.println(r);
+		}
+		
+	}
+	
+	public static int check1()
+	{
+		for (int i = 0; i < 10; i++)
+			for(int j = 0; j < 9; j++)
+				if(!grid[i][j] && !grid[i][j+1])
+				{
+					grid[i][j] = true;
+					grid[i][j+1] = true;
+					return i*10 + j + 1;
+				}
+		return 0;
+	}
+	
+	public static int check2()
+	{
+		for (int i = 0; i < 9; i++)
+			for(int j = 0; j < 10; j++)
+				if(!grid[i][j] && !grid[i+1][j])
+				{
+					grid[i][j] = true;
+					grid[i+1][j] = true;
+					return i*10 + j + 1;
+				}
+		return 0;
+	}
+	
+	public static int check3()
+	{
+		for (int i = 0; i < 9; i++)
+			for(int j = 0; j < 9; j++)
+				if(!grid[i][j] && !grid[i+1][j] && !grid[i+1][j+1])
+				{
+					grid[i][j] = true;
+					grid[i+1][j] = true;
+					grid[i+1][j+1] = true;
+					return i*10 + j + 1;
+				}
+		return 0;
+	}
+	
+	public static int check4()
+	{
+		for (int i = 0; i < 9; i++)
+			for(int j = 0; j < 9; j++)
+				if(!grid[i][j+1] && !grid[i+1][j] && !grid[i+1][j+1])
+				{
+					grid[i][j+1] = true;
+					grid[i+1][j] = true;
+					grid[i+1][j+1] = true;
+					return i*10 + j + 2;
+				}
+		return 0;
+	}
+	
+	public static int check5()
+	{
+		for (int i = 0; i < 9; i++)
+			for(int j = 0; j < 9; j++)
+				if(!grid[i][j] && !grid[i][j+1] && !grid[i+1][j+1])
+				{
+					grid[i][j] = true;
+					grid[i][j+1] = true;
+					grid[i+1][j+1] = true;
+					return i*10 + j + 1;
+				}
+		return 0;
+	}
+	
+	public static int check6()
+	{
+		for (int i = 0; i < 9; i++)
+			for(int j = 0; j < 9; j++)
+				if(!grid[i][j] && !grid[i][j+1] && !grid[i+1][j])
+				{
+					grid[i][j] = true;
+					grid[i][j+1] = true;
+					grid[i+1][j] = true;
+					return i*10 + j + 1;
+				}
+		return 0;
+	}
+	
+	public static void display()
+	{
+		for (int i = 0; i < 10; i++)
+			for (int j = 0; j < 10; j++)
+			{
+				System.out.print(grid[i][j] + " ");
+			}
+		System.out.println();
+	}
+	
+	public static void loadGrid()
+	{
+		Scanner input = new Scanner(System.in);
+		StringTokenizer st;
+		String in = input.nextLine();
+		st = new StringTokenizer(in);
+		String x = st.nextToken();
+		while(!x.equals("0"))
+		{
+			int a = Integer.parseInt(x);
+			int row = (a-1)/10;
+			int col = (a-1)%10;
+			grid[row][col] = true;
+			x = st.nextToken();
+		}
+	}
+	
+	public static int checkShit()
+	{
+		Scanner input = new Scanner(System.in);
+		StringTokenizer st;
+		String in = input.nextLine();
+		st = new StringTokenizer(in);
+		String a = st.nextToken();
+		String b = st.nextToken();
+		
+		if(a.equals("A"))
+		{
+			if(b.equals("0"))
+				return 1;
+			else if (b.equals("90"))
+				return 2;
+			else if (b.equals("180"))
+				return 3;
+		}
+		else if (a.equals("B"))
+		{
+			if (b.equals("0"))
+				return 4;
+			else if (b.equals("90"))
+				return 5;
+			else if (b.equals("180"))
+				return 6;
+		}
+		else if (a.equals("C"))
+		{
+			if (b.equals("0"))
+				return 7;
+			else if (b.equals("90"))
+				return 8;
+			else if (b.equals("180"))
+				return 9;
+		}
+		else if (a.equals("D"))
+		{
+			if (b.equals("0"))
+				return 10;
+			else if (b.equals("90"))
+				return 11;
+			else if (b.equals("180"))
+				return 12;
+		}
+		
+		return 0;
+	}
+}

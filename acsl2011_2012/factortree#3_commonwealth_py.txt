@@ -1,0 +1,46 @@
+#Problem3
+import math
+def bigFact(num):
+    n = 2
+    while n < num:
+        if num % n == 0:
+            return n, 1
+        else:
+            n += 1
+    return num, 0
+def interList(entry):
+    entry = sorted(entry, reverse = True)
+    baseStr = str(entry[0])
+    for e in entry[1:]:
+        baseStr = baseStr + " x " + str(e)
+    return baseStr
+def final(entry):
+    es = sorted(list(set(entry)), reverse = True)
+    baseList = []
+    for e in es:
+        if entry.count(e) == 1:
+            baseList = baseList + [str(e)]
+        else:
+            baseList = baseList + [str(e) + " ^ " + str(entry.count(e))]
+    return " x ".join(baseList)
+def single(num):
+    if num == 1:
+        print(num)
+        print(num)
+        return
+    print(num)
+    factorList = [num]
+    while(bigFact(factorList[0])[1]):
+        newDivisor, stillRun = bigFact(factorList[0])
+        factorList[0] /= newDivisor
+        factorList.append(newDivisor)
+        print(interList(factorList))
+    print(final(factorList))
+def many():
+    for i in range(10):
+        single(int(raw_input("")))
+if __name__ == "__main__":
+    if bigFact(20) != (2, 1):
+        print "PROBLEM!"
+    many()
+    

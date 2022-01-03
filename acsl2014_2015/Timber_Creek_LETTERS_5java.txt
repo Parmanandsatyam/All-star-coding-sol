@@ -1,0 +1,128 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+/*
+The Wizarding World of Harry Potter at Universal Studios.
+Oh what a tangled web we weave when we first practice to deceive.
+*/
+public class LETTERS {
+	static char[] a ={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+	public static void main(String[] args) {
+		Scanner scan=new Scanner(System.in);
+		for (int i=0; i<2;i++){
+			String line = scan.nextLine();
+			line=line.toUpperCase().replaceAll("\\W"," ");
+			//System.out.println(line);
+			process(line);
+
+		}
+
+	}
+
+	public static void process (String line){
+		// line
+		proOne(line.replaceAll(" ", ""));
+		proTwo(line);
+		proFive(line.replaceAll(" ", ""));
+	}
+	public static void proOne (String line){
+		int countmax=1;
+		char letter = line.charAt(0);
+		while (true){
+			if (line.length()==0)break;
+			char testletter=line.charAt(0);
+			line=line.replaceFirst(""+testletter, "");
+			int count=1;
+			while (true){
+
+				if (line.equals(line.replaceFirst(""+testletter, "")))break;
+				else{
+					line=line.replaceFirst(""+testletter, "");
+					count++;
+					if (count>countmax){
+						countmax=count;
+						letter=testletter;
+					}
+				}
+
+			}
+		}
+		System.out.println(letter+" "+countmax);
+	}
+	public static void proTwo (String line){
+
+		boolean[] aaa={false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false};
+		boolean[] aaaa={false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false};
+		String[] aa = line.split(" ");
+		char letter='A';
+		int charmax=0;
+
+		for (int i=0;i<a.length;i++){
+			int count=0;
+			for (int j=0;j<aa.length;j++){
+				if (aa[j].indexOf(a[i])!=-1 ){
+					aaa[i]=true;
+					count++;
+					if (aa[j].indexOf(a[i])!=aa[j].lastIndexOf(a[i]))
+						aaaa[i]=true;
+				}
+			}
+			if (count>charmax){
+				charmax=count;
+				letter=a[i];
+			}
+		}
+		System.out.println(letter+" "+charmax);
+		proThree(aaa);
+		proFour(aaaa);
+	}
+	public static void proThree (boolean[] ifin){
+		for (int i=a.length-1;i>=0;i--)
+			if (ifin[i] == true)
+				System.out.print(a[i]);
+		System.out.println();
+
+	}
+	public static void proFour (boolean[] ifin){
+		for (int i=0;i<a.length;i++)
+			if (ifin[i] == true)
+				System.out.print(a[i]);
+		System.out.println();
+	}
+
+
+	public static void proFive (String line){
+		letterval[] aa=new letterval[26];
+		for (int i=0;i<aa.length;i++)
+			aa[i]=new letterval((char) ((char)'A'+i));
+		for (int i=0; i<line.length();i++){
+			aa[line.charAt(i)-'A'].num++;
+		}
+		Arrays.sort(aa);
+		for (int i =0;i<aa.length;i++){
+			if (aa[i].num>1)
+				System.out.print(aa[i].letter);
+			else break;
+		}
+System.out.println();
+	}
+
+
+}
+
+class letterval implements Comparable<letterval>{
+	char letter;
+	int num;
+	letterval(char let){
+		letter=let;
+	}
+	@Override
+	public int compareTo(letterval L) {
+		if (this.num == L.num) {
+			return (int)(this.letter - L.letter);
+		}
+		return L.num - this.num;
+	}
+}
+
+

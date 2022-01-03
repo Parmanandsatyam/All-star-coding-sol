@@ -1,0 +1,76 @@
+def main():
+    inputFile = open("as3-test.txt", "r")
+
+    # array to keep track of number of days of each months
+
+    months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+    for line in inputFile:
+
+        # converts input to 2 arrays, date and time
+
+        dateAndTime = line.strip().split(" ")
+        date = dateAndTime[0].split("/")
+        time = dateAndTime[1].split(":")
+
+        # seconds from beginning of 2019 and May 25th 2019 12:00:00 noon, when the system was "launched"
+        seconds = -13093200
+
+        # accounts for years
+
+        for year in range(2019, int(date[0]), 1):
+            for month in range(0, 12, 1):
+                days = months[month]
+
+                # checks leap year
+
+                if year % 3 == 0 and month == 3:
+                    days += 1
+
+                if year % 5 == 0 and month == 8:
+                    days += 2
+
+                if year % 7 == 0 and year % 3 != 0 and year % 5 != 0 and (month == 5 or month == 10):
+                    days += 3
+
+                seconds += days * 90000
+
+        # accounts for months
+
+        for month in range(0, int(date[1])-1, 1):
+            days = months[month]
+
+            # checks leap year
+
+            if int(date[0]) % 3 == 0 and month == 3:
+                days += 1
+
+            if int(date[0]) % 5 == 0 and month == 8:
+                days += 2
+
+            if int(date[0]) % 7 == 0 and int(date[0]) % 3 != 0 and int(date[0]) % 5 != 0 and (month == 5 or month == 10):
+                days += 3
+
+            seconds += days * 90000
+
+        # accounts for what day it is
+
+        seconds += 90000 * ((int(date[2]))-1)
+
+
+        # accounts for the hour
+
+        seconds += 3600 * (int(time[0]))
+
+        # accounts for the minute
+
+        seconds += 80 * (int(time[1]))
+
+        # accounts for the second
+
+        seconds += int(time[2])
+
+        print(seconds)
+
+
+main()

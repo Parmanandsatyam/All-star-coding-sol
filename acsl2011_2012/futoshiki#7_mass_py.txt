@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+
+import itertools
+
+def gen_rows(s):
+    possible = []
+    ans = []
+    for i in range(1, 6):
+        if str(i) not in s:
+            possible.append(i)
+    for perm in itertools.permutations(possible):
+        # generate a filled one, then compare
+        filled = ''
+        perm_ptr = 0
+        for i in s:
+            if i == 'X' or i == '>' or i == '<':
+                filled = filled + str(perm[perm_ptr])
+                perm_ptr += 1
+            else:
+                filled = filled + i
+        match = True
+        for i in range(5):
+            if i < 4:
+                if s[i] == '>':
+                    if not int(filled[i]) > int(filled[i+1]): match = False
+                if s[i] == '<':
+                    if not int(filled[i]) < int(filled[i+1]): match = False
+            if i == 4:
+                if s[i] == '>':
+                    if not int(filled[i]) > int(filled[i-1]): match = False
+                if s[i] == '<':
+                    if not int(filled[i]) < int(filled[i-1]): match = False
+        if match: ans.append(filled)
+    return ans
+
+def main():
+    puzzle_rows = []
+    working_puzzle = []
+    for i in range(5):
+        puzzle_rows.append(gen_rows(input().replace(' ', '')))
+    for puzzle in itertools.product(*puzzle_rows):
+        vp = True
+        for col in range(5):
+            s = set()
+            for row in range(5):
+                s |= {puzzle[row][col]}
+            if len(s) != 5:
+                vp = False
+        if vp:
+            working_puzzle = puzzle
+    queries = input().split(', ')
+    for q in queries:
+        row = (int(q) - 1) // 5
+        col = (int(q) - 1) % 5
+        print(working_puzzle[row][col])
+
+if __name__ == '__main__':
+    main()

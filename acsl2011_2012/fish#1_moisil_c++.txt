@@ -1,0 +1,93 @@
+#include <cstdio>
+
+using namespace std;
+
+int player[10],opponent[10],deck[10];
+
+void  print_hands()
+{
+    printf("\n");
+
+    for (int i=1 ; i<=5 ; i++)
+    {
+        for (int j=0 ; j<player[i] ; j++)
+            printf("%d ", i);
+    }
+    printf("\n");
+
+    for (int i=1 ; i<=5 ; i++)
+    {
+        for (int j=0 ; j<opponent[i] ; j++)
+            printf("%d ", i);
+    }
+
+    printf("\n");
+
+    for (int i=1 ; i<=deck[0] ; i++)
+    {
+        printf("%d ", deck[i]);
+    }
+}
+
+void check_four(int hand[])
+{
+    for (int i=1 ; i<=5 ; i++)
+    {
+        if(hand[i]>=4)
+            hand[i]=0;
+    }
+}
+
+void next_turn()
+{
+    int card;
+    scanf("%d",&card);
+    if(opponent[card]!=0)
+    {
+        player[card]+=opponent[card];
+        opponent[card]=0;
+    }
+    else
+    {
+        player[deck[deck[0]++]]++;
+    }
+
+    check_four(player);
+
+    //print_hands();
+
+    printf("%d\n",player[card]);
+}
+
+int main()
+{
+    freopen("fish.in","r",stdin);
+
+    int aux;
+    for (int i=0 ; i<7 ; i++)
+    {
+        scanf("%d,",&aux);
+        opponent[aux]++;
+    }
+
+    for (int i=0 ; i<7 ; i++)
+    {
+        scanf("%d,",&aux);
+        player[aux]++;
+    }
+
+    deck[0]=1;
+    for (int i=1 ; i<=5 ; i++)
+    {
+        scanf("%d,",&deck[i]);
+    }
+
+    //print_hands();
+
+    for (int i=0 ; i<5 ; i++)
+    {
+        next_turn();
+    }
+
+    return 0;
+}

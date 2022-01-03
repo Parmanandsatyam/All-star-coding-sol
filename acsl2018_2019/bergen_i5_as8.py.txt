@@ -1,0 +1,53 @@
+import math
+test_cases = open("as8-test.txt", "r")
+
+def isCorner(x,y, width, height):
+    return (x==0 and y==0) or (x==0 and y==height) or (x==width and y==0) or (x==width and y==height)
+
+def nextHit(m,hx,hy,w,h):
+    bottom_x = -(hy/m) + hx
+    top_x = (h-hy)/m + hx
+    right_y = m*(w-hx)+hy
+    left_y = -m*hx+hy
+    if top_x >= 0 and top_x <= w and top_x!=hx:
+        return (top_x, h)
+
+    elif bottom_x >= 0 and bottom_x <= w and bottom_x!=hx:
+        return (bottom_x, 0)
+
+    elif right_y >= 0 and right_y <= h and right_y!=hy:
+        return (w, right_y)
+
+    elif left_y >= 0 and left_y <= h and left_y !=hy:
+        return (0, left_y)
+
+def round(num):
+    return math.floor(num+0.5)
+
+def evaluate (width, height, hx, hy, m, k):
+    new_location = None
+    for i in range(k-1):
+        if isCorner(hx, hy, width, height):
+            m = 1/m
+        else:
+            m = -m
+        new_location = nextHit(m, hx, hy, width, height)
+        hx = new_location[0]
+        hy = new_location[1]
+    new_x = new_location[0]
+    new_y = new_location[1]
+    if new_x == 0 or new_x == width:
+        return round(new_y)
+    elif new_y ==0 or new_y == height:
+        return round(new_x)
+
+for i in range(10):
+    line = test_cases.readline()
+    width, height, bx, by, hx, hy, k = map(int, line.split())
+    if hx == bx:
+        print(hx)
+    elif hy == by:
+        print(hy)
+    else:
+        slope = (hy-by)/(hx-bx)
+        print(evaluate(width, height, hx, hy, slope,k))

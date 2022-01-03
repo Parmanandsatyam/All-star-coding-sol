@@ -1,0 +1,72 @@
+import re
+
+def gsl(file):
+    return re.split("\s+", file.readline().strip(" \t\r\n"))#check if it splits by tabs
+
+file = open("as8-test.txt")#UPDATE FOR TEST
+
+for tc in range(10):
+    line = gsl(file)
+    line = list(map(int, line))
+    mX = line[0]
+    mY = line[1]
+    ball = (line[2], line[3])
+    velX = line[4] - ball[0]
+    velY = line[5] - ball[1]
+    k = line[6]
+
+    def rico(ball, velX, velY):
+        tx = 0
+        ty = 0
+        xwin = 0
+        ywin = 0
+        if(velX > 0):
+            tx = (mX-ball[0])/velX
+        elif (velX < 0):
+            tx = (0 - ball[0]) / velX
+        else:
+            ywin = 1
+        if (velY > 0):
+            ty = (mY - ball[1]) / velY
+        elif (velY < 0):
+            ty = (0 - ball[1]) / velY
+        else:
+            xwin = 1
+        t = 0
+        temp = ball
+        if(tx==ty):
+            t = tx
+            temp = (ball[0] + (velX * t), ball[1] + (velY * t))
+            tempVel = abs(velY)
+            velY = -velY/abs(velY) *abs(velX)
+            velX = -velX/abs(velX) *tempVel
+        elif(tx<ty):
+            t = tx
+            temp = (ball[0] + (velX * t), ball[1] + (velY * t))
+            velX *= -1
+        else:
+            t = ty
+            temp = (ball[0] + (velX * t), ball[1] + (velY * t))
+            velY *= -1
+
+        ball = temp
+        ans = (ball, velX, velY)
+        return ans
+
+
+    #print(ball, velX, velY)
+    for i in range(k):
+        ball, velX, velY = rico(ball, velX, velY)
+        #print(ball, velX, velY)
+
+    if((ball[0] == mX or ball[0] == 0) and (ball[1] == mY or ball[1]==0)):
+        if(ball[0]>ball[1]):
+            print(round(ball[0]))
+        else:
+            print(round(ball[1]))
+    elif(ball[0] == mX or ball[0] == 0):
+        print(round(ball[1]))
+    else:
+        print(round(ball[0]))
+
+

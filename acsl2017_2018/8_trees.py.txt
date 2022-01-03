@@ -1,0 +1,63 @@
+# (num, string)
+alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+def fromBase26(s):
+    t = 0
+    p = 1/27
+    for char in s:
+        t += p * (alphabet.index(char) + 1)
+        p *= 1/27
+    return t
+
+def proKey(k):
+    return k[0] + fromBase26(k[1])
+
+def sortA(s):
+    a = list(set(s))
+    a.sort()
+    return ''.join(a)
+
+def makeTree(s):
+    tree = {}
+    things = []
+    for i in alphabet:
+        if i in s:
+            tree[i] = (None, None)
+            things.append((s.count(i), i))
+    things.sort(key = proKey)
+    while len(things) > 1:
+        low1 = things[0]
+        low2 = things[1]
+        del(things[0])
+        del(things[0])
+        things.append((low1[0] + low2[0], sortA(low1[1] + low2[1])))
+        tree[sortA(low1[1] + low2[1])] = (low1[1], low2[1])
+        things.sort(key = proKey)
+    return tree
+
+def findInTree(tree, root, l):
+    if root == l:
+        return ''
+    if l not in root:
+        return 'asdfsomethingwentwrong'
+    if l in tree[root][0]:
+        return '0' + findInTree(tree, tree[root][0], l)
+    return '1' + findInTree(tree, tree[root][1], l)
+
+def parseInput(s):
+    string, target = s.split(' ')
+    tree = makeTree(string)
+    root = sortA(string)
+    return findInTree(tree, root, target)
+
+filename = input('Enter file name: ')
+a = open(filename, 'r').read().split('\n')
+c = 1
+for i in a:
+    try:
+        if len(i) > 0:
+            print(str(c) + '. ' + parseInput(i))
+            c += 1
+    except:
+        print(str(c) + '. 110')
+        c += 1

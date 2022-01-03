@@ -1,0 +1,82 @@
+import java.io.*;
+import java.util.*;
+
+public class FactorTrees
+{
+	public static void main(String [] args) throws IOException
+	{
+		BufferedReader kb = new BufferedReader(new InputStreamReader(System.in));
+		for(int ii=1;ii<=10;ii++)
+		{
+		System.out.print(ii + ". ");
+		int original = Integer.parseInt(kb.readLine());
+		int gFact = original;
+		System.out.println();
+		ArrayList<Integer> oFact = new ArrayList<Integer>();
+		System.out.println(original);
+		for(int i=0;i<20;i++)
+		{
+			if(gf(gFact)!=1)
+			{
+				oFact.add(0,gFact / gf(gFact));
+				gFact = gf(gFact);
+				System.out.print(gFact);
+				for(int i2=0;i2<oFact.size();i2++)
+				{
+					System.out.print(" x " + oFact.get(i2));
+				}
+				System.out.println();
+			}
+			else
+			{
+				break;
+			}
+		}
+		oFact.add(0,gFact);
+		ArrayList<Integer> oFact2 = new ArrayList<Integer>();
+		int prev = -1;
+		for(int i2=0;i2<oFact.size();i2++)
+		{
+			if(prev != oFact.get(i2))
+			{
+				oFact2.add(oFact.get(i2));
+				prev = oFact.get(i2);
+			}
+		}
+		int[] num = new int[oFact2.size()];
+		for(int i2=0;i2<oFact2.size();i2++)
+		{
+			for(int i3=0;i3<oFact.size();i3++)
+			{
+				if(oFact2.get(i2) == oFact.get(i3))
+				{
+					num[i2]++;
+				}
+			}
+		}
+		System.out.print(oFact.get(0));
+		if(num[0] > 1)
+		{
+			System.out.print(" ^ " + num[0]);
+		}
+		for(int i=1;i<oFact2.size();i++)
+		{
+			System.out.print(" x " + oFact2.get(i));
+			if(num[i] > 1)
+			{
+				System.out.print(" ^ " + num[i]);
+			}
+		}
+		System.out.println();
+		System.out.println();
+		}
+	}
+	public static int gf(int x)
+	{
+		for(int i = x/2;i>0;i--)
+		{
+			if(x%i == 0) return i;
+		}
+		return 1;
+	}
+}

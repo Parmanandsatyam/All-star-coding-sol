@@ -1,0 +1,29 @@
+filename = "as4-test.txt"
+inp = ""
+with open(filename) as f:
+    inp = f.readlines()
+
+
+for line in inp:
+    try:
+        ls = line.upper().split()
+        start = int(ls[0])
+        s = list(ls[1])
+        for i in s:
+            if i=="B":
+                if not (int(start) in [13,14,15,16]):
+                    start+=4
+            if i=="A":
+                if not (int(start) in [1,2,3,4]):
+                    start-=4
+            if i=="L":
+                if not (int(start) in [1,5,9,13]):
+                    start-=1
+            if i=="R":
+                if not (int(start) in [4,8,12,16]):
+                    start+=1
+        print(start)
+    except Exception as e:
+        print("7")
+
+input("Hit enter to end: ")

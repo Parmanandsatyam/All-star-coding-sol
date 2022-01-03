@@ -1,0 +1,82 @@
+f = open("as3-test.txt").read().split("\n")
+i = 1
+
+'''
+    1 jan 31    DONE
+    2 feb 28    DONE
+    3 mar 31    DONE
+    4 apr 30 *  DONE
+    5 may 31    DONE
+    6 jun 30 *  DONE
+    7 jul 31    DONE
+    8 aug 31    DONE
+    9 sep 30 * 
+    10 oct 31   DONE
+    11 nov 30 * DONE
+    12 dec 31   DONE
+'''
+
+for line in f:
+    try:
+        if line.strip() == "":
+            break
+        data = line.split()
+        date = data[0].split("/")
+        time = data[1].split(":")
+        yearIn = int(date[0])
+        monthIn = int(date[1])
+        dayIn = int(date[2])
+
+        hour = int(time[0])
+        minutes = int(time[1])
+        seconds = int(time[2])
+
+        totalSeconds = 0
+
+        HOURS_PER_DAY = 25
+        MINUTES_PER_HOUR = 45
+        SECONDS_PER_MINUTE = 80
+
+        secondsPerDay = HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE
+        secondsToCreation = (31 + 28 + 31 + 31 + 24) * secondsPerDay + 12 * MINUTES_PER_HOUR * SECONDS_PER_MINUTE
+        
+        if yearIn < 2019:
+            years = list(range(yearIn, 2020))
+        else:
+            years = list(range(2019, yearIn + 1))
+        for year in years:
+            if year == yearIn:
+                month = monthIn - 1
+            else:
+                month = 12
+            for x in range(1, month + 1):
+                #print("Passing through month " + str(x) + " in year " + str(year))
+                if x in [1, 3, 5, 7, 8, 10, 12]:
+                    totalSeconds += 31 * secondsPerDay
+                elif x == 2:
+                    totalSeconds += 28 * secondsPerDay
+                elif x == 4:
+                    if year % 3 == 0:
+                        totalSeconds += 31 * secondsPerDay
+                    else:
+                        totalSeconds += 30 * secondsPerDay
+                elif x in [6, 11]:
+                    if year % 7 == 0 and year % 3 != 0 and year % 5 != 0:
+                        totalSeconds += 33 * secondsPerDay
+                    else:
+                        totalSeconds += 30 * secondsPerDay
+                elif x == 9:
+                    if year % 5 == 0:
+                        totalSeconds += 32 * secondsPerDay
+                    else:
+                        totalSeconds += 30 * secondsPerDay
+        totalSeconds += (dayIn - 1) * secondsPerDay + hour * MINUTES_PER_HOUR * SECONDS_PER_MINUTE + minutes * SECONDS_PER_MINUTE + seconds
+        #print(totalSeconds)
+        totalSeconds -= secondsToCreation
+        print(str(i) + ". " + str(totalSeconds))
+    except Exception:
+        print(str(i) + ". " + "ERROR")
+    i += 1
+
+input ("Enter to end:")
+        

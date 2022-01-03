@@ -1,0 +1,326 @@
+
+public class Jigsaw 
+{
+	static int[][] matrix = new int[10][10];
+	
+	public static void main(String[] args)
+	{
+		String[] input = {
+			"2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 0",
+			"A, 90",
+			"D, 90",
+			"B, 0",
+			"C, 180",
+			"B, 90",
+			"B, 90",
+			"A, 180",
+			"D, 180",
+			"C, 0",
+			"A, 90"
+		};
+		
+		String[] fill = input[0].split(" ");
+		int[] intFill = new int[fill.length];
+		
+		for(int i = 0; i < fill.length-1; i++)
+		{
+			intFill[i] = Integer.parseInt(fill[i]);
+			//System.out.println(intFill[i]);
+		}
+		
+		int fillCounter = 0;
+		int index = 0;
+		
+		for(int i = 9; i >= 0; i--)
+		{
+			
+			for(int k = 0; k < 10; k++)
+			{
+				
+				if(index == intFill[fillCounter]-1)
+				{
+					matrix[i][k] = 1; // ONE EQUALS FILLED
+					fillCounter++;
+				}
+				index++;
+			}
+		}
+
+		//----------------------------------------------------------------
+		for(int i = 1; i < input.length; i++)
+		{
+			//System.out.println("check");
+			
+			if(input[i].equals("A, 0"))
+				a0();
+			if(input[i].equals("A, 90"))
+				a90();
+			if(input[i].equals("A, 180"))
+				a180();
+			
+			if(input[i].equals("B, 0"))
+				b0();
+			if(input[i].equals("B, 90"))
+				b90();
+			if(input[i].equals("B, 180"))
+				b180();
+			
+			if(input[i].equals("C, 0"))
+				c0();
+			if(input[i].equals("C, 90"))
+				c90();
+			if(input[i].equals("C, 180"))
+				c180();
+			
+			if(input[i].equals("D, 0"))
+				d0();
+			if(input[i].equals("D, 90"))
+				d90();
+			if(input[i].equals("D, 180"))
+				d180();			
+		}
+		
+	/*
+		for(int i = 0; i < 10; i++)
+		{
+			for(int k = 0; k < 10; k++)
+			{
+				System.out.print(matrix[i][k] + "\t");
+			}
+			System.out.println();
+		}
+	*/					
+		}
+	
+	
+		public static void a0 ()
+		{
+			boolean flag = true;
+			for(int i = 9; i >= 0; i--)				
+			{	
+				for(int k = 0; k < 9; k++)
+				{
+					if(flag && matrix[i][k] == 0 && matrix[i][k+1] == 0)
+					{
+						matrix[i][k] = 2;
+						matrix[i][k+1] = 2;
+						System.out.println((10-(i+1))*10 + (k+1));
+						flag = false;
+					}
+				}
+			}
+		}
+		//--------------------------------------------------------------------------
+		public static void a90 ()
+		{
+			boolean flag = true;
+			for(int i = 9; i >= 1; i--)
+			{
+				for(int k = 0; k < 10; k++)
+				{
+					if(flag && matrix[i][k] == 0 && matrix[i-1][k] == 0)
+					{
+						matrix[i][k] = 3;
+						matrix[i-1][k] = 3;		
+						System.out.println((10-(i+1))*10 + (k+1));
+						flag = false;
+					}
+				}
+			}
+		}
+		//--------------------------------------------------------------------------
+		public static void a180 ()
+		{
+			boolean flag = true;
+			for(int i = 9; i >= 0; i--)
+			{
+				for(int k = 0; k < 9; k++)
+				{
+					if(flag && matrix[i][k] == 0 && matrix[i][k+1] == 0)
+					{
+						matrix[i][k] = 4;
+						matrix[i][k+1] = 4;		
+						System.out.println((10-(i+1))*10 + (k+1));
+						flag = false;
+					}
+				}
+			}
+		}
+		//--------------------------------------------------------------------------
+		public static void b0 ()
+		{
+			boolean flag = true;
+			for(int i = 9; i >= 1; i--)
+			{
+				for(int k = 0; k < 9; k++)
+				{
+					if(flag && matrix[i][k] == 0 && matrix[i-1][k] == 0 && matrix[i-1][k+1] == 0)
+					{
+						matrix[i][k] = 5;
+						matrix[i-1][k] = 5;		
+						matrix[i-1][k+1] = 5;
+						System.out.println((10-(i+1))*10 + (k+1));
+						flag = false;
+					}
+				}
+			}
+		}
+		//-------------------------------------------------------------------------------
+		public static void b90 ()
+		{
+			boolean flag = true;
+			for(int i = 9; i >= 1; i--)
+			{
+				for(int k = 0; k < 9; k++)
+				{
+					if(flag && matrix[i][k+1] == 0 && matrix[i-1][k] == 0 && matrix[i-1][k+1] == 0)
+					{
+						matrix[i][k+1] = 6;
+						matrix[i-1][k] = 6;		
+						matrix[i-1][k+1] = 6;
+						System.out.println((10-(i+1))*10 + (k+2));
+						flag = false;
+					}
+				}
+			}
+		}
+		//-----------------------------------------------------------------------------------------
+		public static void b180 ()
+		{
+			boolean flag = true;
+			for(int i = 9; i >= 1; i--)
+			{
+				for(int k = 0; k < 9; k++)
+				{
+					if(flag && matrix[i][k] == 0 && matrix[i][k+1] == 0 && matrix[i-1][k+1] == 0)
+					{
+						matrix[i][k] = 7;
+						matrix[i][k+1] = 7;		
+						matrix[i-1][k+1] = 7;
+						System.out.println((10-(i+1))*10 + (k+1));
+						flag = false;
+					}
+				}
+			}
+		}
+		
+		//----------------------------------------------------------------------------------------
+		public static void c0 ()
+		{
+			boolean flag = true;
+			for(int i = 9; i >= 1; i--)
+			{
+				for(int k = 0; k < 9; k++)
+				{
+					if(flag && matrix[i][k+1] == 0 && matrix[i-1][k] == 0 && matrix[i-1][k+1] == 0)
+					{
+						matrix[i][k+1] = 8;
+						matrix[i-1][k] = 8;		
+						matrix[i-1][k+1] = 8;
+						System.out.println((10-(i+1))*10 + (k+2));
+						flag = false;
+					}
+				}
+			}
+		}
+		//--------------------------------------------------------------------------------------------------------------
+		public static void c90 ()
+		{
+			boolean flag = true;
+			for(int i = 9; i >= 1; i--)
+			{
+				for(int k = 0; k < 9; k++)
+				{
+					if(flag && matrix[i][k] == 0 && matrix[i][k+1] == 0 && matrix[i-1][k+1] == 0)
+					{
+						matrix[i][k] = 9;
+						matrix[i][k+1] = 9;		
+						matrix[i-1][k+1] = 9;
+						System.out.println((10-(i+1))*10 + (k+1));
+						flag = false;
+					}
+				}
+			}
+		}
+		//-------------------------------------------------------------------------------------------------------------
+		public static void c180 ()
+		{
+			boolean flag = true;
+			for(int i = 9; i >= 1; i--)
+			{
+				for(int k = 0; k < 9; k++)
+				{
+					if(flag && matrix[i][k] == 0 && matrix[i][k+1] == 0 && matrix[i-1][k] == 0)
+					{
+						matrix[i][k] = 10;
+						matrix[i][k+1] = 10;		
+						matrix[i-1][k] = 10;
+						System.out.println((10-(i+1))*10 + (k+1));
+						flag = false;
+					}
+				}
+			}
+		}
+		
+		//-------------------------------------------------------------------------------------------------------------
+		public static void d0 ()
+		{
+			boolean flag = true;
+			for(int i = 9; i >= 1; i--)
+			{
+				for(int k = 0; k < 9; k++)
+				{
+					if(flag && matrix[i][k] == 0 && matrix[i][k+1] == 0 && matrix[i-1][k] == 0)
+					{
+						matrix[i][k] = 11;
+						matrix[i][k+1] = 11;		
+						matrix[i-1][k] = 11;
+						System.out.println((10-(i+1))*10 + (k+1));
+						flag = false;
+					}
+				}
+			}
+		}
+		
+		//------------------------------------------------------------------------------------------------------
+		public static void d90 ()
+		{
+			boolean flag = true;
+			for(int i = 9; i >= 1; i--)
+			{
+				for(int k = 0; k < 9; k++)
+				{
+					if(flag && matrix[i][k] == 0 && matrix[i-1][k] == 0 && matrix[i-1][k+1] == 0)
+					{
+						matrix[i][k] = 12;
+						matrix[i-1][k] = 12;		
+						matrix[i-1][k+1] = 12;
+						System.out.println((10-(i+1))*10 + (k+1));
+						flag = false;
+					}
+				}
+			}
+		}
+		
+		//-----------------------------------------------------------------------------------------------------
+		public static void d180 ()
+		{
+			boolean flag = true;
+			for(int i = 9; i >= 1; i--)
+			{
+				for(int k = 0; k < 9; k++)
+				{
+					if(flag && matrix[i][k] == 0 && matrix[i][k+1] == 0 && matrix[i-1][k+1] == 0)
+					{
+						matrix[i][k] = 13;
+						matrix[i][k+1] = 13;		
+						matrix[i-1][k+1] = 13;
+						System.out.println((10-(i+1))*10 + (k+1));
+						flag = false;
+					}
+				}
+			}
+		}
+		
+		
+}

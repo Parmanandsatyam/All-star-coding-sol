@@ -1,0 +1,137 @@
+DIM hold(100)
+FOR k = 1 to 10
+
+
+
+    LET answer$=""
+    LET print$=""
+    LET numtest=0
+    LET numtest2=0
+    LET numhold=0
+    LET repeat=0
+    LET used=0
+    LET temp=0
+
+
+    INPUT Prompt "Number":numtest
+print numtest
+    MAT reDIM hold(100)
+
+
+    FOR a = 1 to 100
+
+
+
+        LET hold(a)=0
+    NEXT a
+    DO
+
+       FOR x=numtest-1 to 2 step-1
+
+           IF int(numtest/x)=numtest/x then
+
+              IF x>numtest2 then
+                 LET numtest2=x
+              END IF
+           END IF
+
+       NEXT x
+
+
+
+       FOR y=2 to numtest2
+           IF y*numtest2=numtest then
+              LET numhold=numhold+1
+
+              !Print "hold";hold(numhold)
+
+              !print y
+              LET hold(numhold)= y
+           END IF
+       NEXT y
+
+
+
+       IF numtest2=0 then
+          LET print$="no"
+       END IF
+
+
+
+       IF print$="no" then
+
+          LET numhold=numhold+1
+          LET hold(numhold)=numtest
+
+       ELSE
+
+          PRINT numtest2;
+          FOR a=numhold to 1 step -1
+              PRINT "*";hold(a);
+          NEXT a
+          PRINT
+
+
+
+
+
+       END IF
+
+       LET numtest=numtest2
+       LET numtest2=0
+
+    LOOP until numtest=0
+
+
+
+
+    MAT Redim hold(numhold)
+
+    FOR x= 1 to numhold
+        FOR y=1 to numhold-1
+            IF hold(y)<hold(y+1) then
+               LET temp=hold(y)
+               LET hold(y)=hold(y+1)
+               LET hold(y+1)=temp
+            END IF
+        NEXT y
+    NEXT x
+
+    LET used=1
+    DO
+       FOR x=used to numhold
+           IF hold(used)= hold(x) then
+              LET repeat=repeat+1
+           END IF
+       NEXT x
+       IF repeat>1 then
+          LET answer$=answer$ & str$(hold(used)) & "^" & str$(repeat) & "*"
+
+
+
+
+       ELSE
+          LET answer$=answer$ & str$(hold(used)) & "*"
+
+
+       END IF
+       LET used =used + repeat
+       LET repeat=0
+       !let used=used+1
+
+    LOOP until used > numhold
+
+    LET answer$=answer$[1:len(answer$)-1]
+
+    PRINT answer$
+
+
+
+
+NEXT k
+
+
+
+
+
+END

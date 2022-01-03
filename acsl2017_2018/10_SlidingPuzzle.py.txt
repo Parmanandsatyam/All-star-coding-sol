@@ -1,0 +1,44 @@
+f=open('as10-test.txt').readlines()
+g=[]
+for i in f:
+    while i[-1] in ' \t\n':
+        i=i[:-1]
+    g.append(i.split(' '))
+
+#start solving each case
+for i in g:
+  try: #half-indent shh
+    i = [int(j) for j in i]
+    dim = i[0]
+    grid = list(range(1,dim**2))
+    grid = grid[:i[1]-1]+[0]+grid[i[1]-1:]
+    for tile in i[2:]: #move each tile
+        ecoords = (grid.index(0)//dim, grid.index(0)%dim)
+        tcoords = (grid.index(tile)//dim, grid.index(tile)%dim)
+        if ecoords[0] == tcoords[0]:
+            if ecoords[1] < tcoords[1]:
+                for i in range(tcoords[1]-ecoords[1]):
+                    zero = grid.index(0)
+                    grid[zero] = grid[zero+1]
+                    grid[zero+1] = 0
+            else:
+                for i in range(ecoords[1]-tcoords[1]):
+                    zero = grid.index(0)
+                    grid[zero] = grid[zero-1]
+                    grid[zero-1] = 0
+        elif ecoords[1] == tcoords[1]:
+            if ecoords[0] < tcoords[0]:
+                for i in range(tcoords[0]-ecoords[0]):
+                    zero = grid.index(0)
+                    grid[zero] = grid[zero+dim]
+                    grid[zero+dim] = 0
+            else:
+                for i in range(ecoords[0]-tcoords[0]):
+                    zero = grid.index(0)
+                    grid[zero] = grid[zero-dim]
+                    grid[zero-dim] = 0
+        else:
+            raise Exception('tile and empty not lined up '+str(ecoords)+str(tcoords))
+    print(grid.index(0)+1)
+  except:
+    print('error')

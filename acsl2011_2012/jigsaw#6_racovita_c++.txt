@@ -1,0 +1,91 @@
+#include<iostream>
+#include<fstream>
+using namespace std;
+long i,x,A[100][100],j,f,ok,R[100],k;
+char C;
+ifstream fi("jigsaw.in");
+int main()
+{
+	x=1;
+	while(x!=0)
+	{
+		fi>>x;
+		A[x/10+1][x%10]=1;
+	}
+	for(i=1;i<=10;i++)
+	{
+		fi>>C>>f;
+		ok=0;
+		//caz 1
+		if((C=='A'&&f==0) || (C=='A'&&f==180))
+				for(j=1;j<=10;j++)
+					for(k=1;k<=9;k++)
+						if(ok==0)
+							if(A[j][k]==0&&A[j][k+1]==0)
+							{
+								A[j][k]=A[j][k+1]=1;
+								cout<<(j-1)*10+k<<endl;
+								ok=1;
+							}
+		//caz 2					
+							if(C=='A'&&f==90)
+				for(j=1;j<=9;j++)
+					for(k=1;k<=10;k++)
+						if(ok==0)
+							if(A[j][k]==0&&A[j+1][k]==0)
+							{
+								A[j][k]=A[j+1][k]=1;
+								cout<<(j-1)*10+k<<endl;
+								ok=1;
+							}
+							//caz 3
+							if((C=='B'&&f==0) || (C=='D'&&f==90))
+				for(j=1;j<=9;j++)
+					for(k=1;k<=9;k++)
+						if(ok==0)
+							if(A[j][k]==0&&A[j+1][k]==0&&A[j+1][k+1]==0)
+							{
+								A[j][k]=A[j+1][k]=A[j+1][k+1]=1;
+								cout<<(j-1)*10+k<<endl;
+								ok=1;
+							}
+							//caz 4
+							if((C=='B'&&f==90) || (C=='C'&&f==0))
+				for(j=1;j<=10;j++)
+					for(k=2;k<=10;k++)
+						if(ok==0)
+							if(A[j][k]==0&&A[j+1][k-1]==0&&A[j+1][k]==0)
+							{
+								A[j][k]=A[j+1][k-1]=A[j+1][k]=1;
+								cout<<(j-1)*10+k<<endl;
+								ok=1;
+							}
+							
+							//caz 5
+							if((C=='B'&&f==180) || (C=='C'&&f==90) || (C=='D'&&f==180))
+				for(j=1;j<=9;j++)
+					for(k=1;k<=9;k++)
+						if(ok==0)
+							if(A[j][k]==0&&A[j][k+1]==0&&A[j+1][k+1]==0)
+							{
+								A[j][k]=A[j][k+1]=A[j+1][k+1]=1;
+								cout<<(j-1)*10+k<<endl;
+								ok=1;
+							}
+						//caz 6
+							if((C=='C'&&f==180) || (C=='D'&&f==0))
+				for(j=1;j<=9;j++)
+					for(k=1;k<=9;k++)
+						if(ok==0)
+							if(A[j][k]==0&&A[j+1][k]==0&&A[j][k+1]==0)
+							{
+								A[j][k]=A[j+1][k]=A[j][k+1]=1;
+								cout<<(j-1)*10+k<<endl;
+								ok=1;
+							}
+	if(ok==0)
+		cout<<"NONE"<<endl;
+	}
+	fi.close();
+	return 0;
+}

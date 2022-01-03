@@ -1,0 +1,238 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package acslball;
+
+/**
+ *
+ * @author prana_000
+ */
+
+import java.util.Scanner;
+import java.io.*;
+import java.util.Arrays;
+public class ACSLBALl {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        Scanner scan; String[] inputData = new String[10]; String temp;
+        
+        try {
+            scan = new Scanner(new File("inputData.txt"));
+        } catch (Exception e) {
+            System.out.println("No input");
+            return;
+        }
+        
+        for (int i = 0; i < 10; i++) {
+            inputData[i] = scan.nextLine().replace(" ", "");
+        }
+        
+        String[] players =  new String[10];
+        for (int i = 0; i < 10; i++){
+            players[i] = inputData[i].split(",")[0];
+        }
+        int[] zone1 = new int[10];
+        for (int i = 0; i < 10; i++){
+            zone1[i] = Integer.valueOf(String.valueOf(inputData[i].split(",")[1].charAt(0)));
+        }
+        int[] zone2 = new int[10];
+        for (int i = 0; i < 10; i++){
+            zone2[i] = Integer.valueOf(String.valueOf(inputData[i].split(",")[1].charAt(1))) * 2;
+        }
+        int[] zone3 = new int[10];
+        for (int i = 0; i < 10; i++){
+            zone3[i] = Integer.valueOf(String.valueOf(inputData[i].split(",")[1].charAt(2))) * 3;
+        }
+        int[] zone4 = new int[10];
+        for (int i = 0; i < 10; i++){
+            zone4[i] = Integer.valueOf(String.valueOf(inputData[i].split(",")[1].charAt(3))) * 4;
+        }
+        int[] playerpoints = new int[10];
+        for (int i = 0; i < 10; i ++){
+            playerpoints[i] = zone1[i] + zone2[i] + zone3[i] + zone4[i];
+        }
+        
+        int[] attempts = new int[10];
+        for (int i = 0; i < 10; i++){
+           attempts[i] = "0123456789ABCDEF".indexOf(String.valueOf(inputData[i].split(",")[1].charAt(4)));
+
+        }
+        
+        double mean = playerpoints[0] + playerpoints[1] + playerpoints[2] + playerpoints[3] +
+                playerpoints[4] + playerpoints[5] + playerpoints[6] + playerpoints[7] + playerpoints[8] + playerpoints[9];
+        mean = mean / 10d;
+        String strMean = mean % 1 == 0 ? String.valueOf(Math.round(mean)) : String.valueOf(mean);
+        System.out.println(strMean);
+        
+        Arrays.sort(playerpoints);
+        double median = (new Double(playerpoints[4]) + new Double(playerpoints[5])) / 2;
+        String strMedian = median % 1 == 0 ? String.valueOf(Math.round(median)) : String.valueOf(median);
+        System.out.println(strMedian);
+        
+        for (int i = 0; i < 10; i ++){
+            playerpoints[i] = zone1[i] + zone2[i] + zone3[i] + zone4[i];
+        }
+        
+        int largestx = 0;
+        int highx = 0;
+        for (int i = 0; i<5; i++){
+            if (playerpoints[i] > largestx){
+                largestx = playerpoints[i];
+                highx = i;
+            }
+        }
+        String highscorers = players[highx] + ", ";
+        int largesty = 0;
+        int highy = 0;
+        for (int i = 5; i < 10; i++){
+            if (playerpoints[i] > largesty){
+                largesty = playerpoints[i];
+                highy = i;
+            }
+        }
+        highscorers = highscorers + players[highy];
+        System.out.println(highscorers);
+        
+        int highest = 0;
+        int hp = 0;
+        for (int i = 0; i < 10; i ++){
+            if (playerpoints[i] > highest){
+                highest = playerpoints[i];
+                hp = i;
+            }
+        }
+        String output4 = players[hp];
+        int secondhighest = 0;
+        int shp = 0;
+        int[] newplayerpoints = new int[9];
+        for (int i = 0; i < 10; i++){
+            if (i < hp)
+                newplayerpoints[i] = playerpoints[i];
+            else if (i > hp)
+                newplayerpoints[i - 1] = playerpoints[i];
+        }
+        for (int i =0; i < 9; i ++){
+            if (newplayerpoints[i] > secondhighest){
+                secondhighest = newplayerpoints[i];
+                shp = i;
+            }
+        }
+        if (shp >= hp)
+            output4 = output4 + ", " + players[shp + 1];
+        else
+            output4 = output4 + ", " + players[shp];
+        System.out.println(output4);
+        
+        int teamX = playerpoints[0] + playerpoints[1] + playerpoints[2] + playerpoints[3] + playerpoints[4];
+        int teamY = playerpoints[5] + playerpoints[6] + playerpoints[7] + playerpoints[8] + playerpoints[9];
+        
+        if (teamX > teamY){
+            System.out.println(teamX + ", " + teamY);
+        }
+        else if (teamY >= teamX){
+            System.out.println(teamY + ", " + teamX);
+        }
+        
+        int lowest = 100;
+        int lp = 0;
+        for(int i = 0; i < 10; i++){
+            if (playerpoints[i] < lowest){
+                lowest = playerpoints[i];
+                lp = i;
+            }
+        }
+        String lowestp = players[lp];
+        for (int i = 0; i < 10; i++){
+            if (playerpoints[i] == lowest && i != lp){
+                lowestp = lowestp + ", " + players[i];
+            }
+        }
+        System.out.println(lowestp);
+        
+        int[] playergoals = new int[10];
+        for (int i = 0; i < 10; i++) {
+            playergoals[i] = zone1[i] + zone2[i] / 2 + zone3[i] / 3 + zone4[i] / 4;
+        }
+        
+        double[] percent = new double[10];
+        
+        for (int i = 0; i < 10; i++){
+            try {
+            percent[i] = new Double(playergoals[i]) / new Double(attempts[i]) * 100d;
+            } catch (Exception e) { percent[i] = -1.0; }
+        }
+        double highestpercent = 0;
+        int hper = 0;
+        
+        for (int i = 0; i < 5; i++){
+            if (percent[i] > highestpercent){
+                highestpercent = percent[i];
+                hper = i;
+            }
+        }
+        String output7 = players[hper];
+        for (int i = 0; i < 5; i++){
+            if (percent[i] == highestpercent && i != hper){
+                output7 = output7 + ", " + players[i];
+            }
+        }
+        System.out.println(output7);
+        
+        double lowestpercent = 100;
+        int lper = 0;
+        for (int i = 5; i < 10; i++){
+            if (percent[i] < lowestpercent){
+                lowestpercent = percent[i];
+                lper = i;
+            }
+        }
+        String output8 = players[lper];
+        for (int i = 5; i<10; i++){
+            if (percent[i] == lowestpercent && i != lper){
+                output8 = output8 + ", " + players[i];
+            }
+        }
+        System.out.println(output8);
+        
+        int highest2 = 0;
+        int h2p = 0;
+        for (int i = 0; i < 10; i++){
+            if (zone2[i] > highest2){
+                highest2 = zone2[i];
+                h2p = i;
+            }
+        }
+        String output9 = players[h2p];
+        for (int i = 0; i <10; i++){
+            if (zone2[i] == highest2 && i != h2p){
+                output9 = output9 + ", " + players[i];
+            }
+        }
+        System.out.println(output9);
+        
+        int highest1 = 0;
+        int h1p = 0;
+        for (int i = 0; i < 10; i++){
+            if (zone1[i] > highest1){
+                highest1 = zone1[i];
+                h1p = i;
+            }
+        }
+        String output10 = players[h1p];
+        for (int i = 0; i <10; i++){
+            if (zone1[i] == highest1 && i != h1p){
+                output10 = output10 + ", " + players[i];
+            }
+        }
+        System.out.println(output10);
+        
+        
+    }   
+    
+}

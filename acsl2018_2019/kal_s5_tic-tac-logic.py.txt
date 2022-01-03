@@ -1,0 +1,302 @@
+file = open("as6-test.txt")
+
+
+def prin(grid):
+    n = len(grid)
+    for a in range(n):
+        for b in range(n):
+            if grid[a][b] == -1:
+                print("X", end=" ")
+            elif grid[a][b] == 1:
+                print("O", end=" ")
+            else:
+                print("-", end=" ")
+        print()
+    print()
+
+
+def transpose(grid):
+    n = len(grid)
+    gri = []
+    for a in range(n):
+        x = []
+        for b in range(n):
+            x.append(grid[b][a])
+        gri.append(x)
+    return gri
+
+
+def checkEqual(grid):
+    n = len(grid)
+    for a in range(n):
+        xes = 0
+        oes = 0
+        for b in range(n):
+            if grid[a][b] == -1:
+                xes += 1
+            else:
+                oes += 1
+        if xes != oes:
+            return False
+    for a in range(n):
+        xes = 0
+        oes = 0
+        for b in range(n):
+            if grid[b][a] == -1:
+                xes += 1
+            else:
+                oes += 1
+        if xes != oes:
+            return False
+    return True
+
+
+def checkUnique(grid):
+    n = len(grid)
+    tGrid = transpose(grid)
+    for a in range(n):
+        for b in range(a + 1, n):
+            if grid[a] == grid[b]:
+                return False
+            if tGrid[a] == tGrid[b]:
+                return False
+    return True
+
+
+def isFull(grid):
+    n = len(grid)
+    for a in grid:
+        if 0 in a:
+            return False
+    return True
+
+
+def nextEmpty(grid):
+    n = len(grid)
+    if isFull(grid):
+        return -1
+    for a in range(n ** 2):
+        if grid[a//n][a % n] == 0:
+            return a
+
+
+def checkConsec(grid):
+    n = len(grid)
+    tGrid = transpose(grid)
+    for a in range(n):
+        last = 0
+        count = 0
+        for b in grid[a]:
+            if b == last:
+                count += 1
+            else:
+                count = 1
+                last = b
+            if count >= 3 and last != 0:
+                return False
+    for a in range(n):
+        last = 0
+        count = 0
+        for b in tGrid[a]:
+            if b == last:
+                count += 1
+            else:
+                count = 1
+                last = b
+            if count >= 3 and last != 0:
+                return False
+    return True
+
+
+
+def answer(grid):
+    n = len(grid)
+    stg = ""
+    for a in range(n):
+        if grid[a][a] == -1:
+            stg += "1"
+        else:
+            stg += "0"
+    while len(stg) % 4 != 0:
+        stg = "0" + stg
+    ans = ""
+    for a in range(len(stg) // 4):
+        bi = stg[4 * a:4 * a + 4]
+        if bi[0] == "0":
+            if bi[1] == "0":
+                if bi[2] == "0":
+                    if bi[3] == "0":
+                        ans += "0"
+                    else:
+                        ans += "1"
+                else:
+                    if bi[3] == "0":
+                        ans += "2"
+                    else:
+                        ans += "3"
+            else:
+                if bi[2] == "0":
+                    if bi[3] == "0":
+                        ans += "4"
+                    else:
+                        ans += "5"
+                else:
+                    if bi[3] == "0":
+                        ans += "6"
+                    else:
+                        ans += "7"
+        else:
+            if bi[1] == "0":
+                if bi[2] == "0":
+                    if bi[3] == "0":
+                        ans += "8"
+                    else:
+                        ans += "9"
+                else:
+                    if bi[3] == "0":
+                        ans += "A"
+                    else:
+                        ans += "B"
+            else:
+                if bi[2] == "0":
+                    if bi[3] == "0":
+                        ans += "C"
+                    else:
+                        ans += "D"
+                else:
+                    if bi[3] == "0":
+                        ans += "E"
+                    else:
+                        ans += "F"
+    return ans
+
+
+def overSat(grid):
+    n = len(grid)
+    for a in range(n):
+        xes = 0
+        oes = 0
+        for b in range(n):
+            if grid[a][b] == -1:
+                xes += 1
+            elif grid[a][b] == 1:
+                oes += 1
+        if xes > n // 2 or oes > n // 2:
+            return True
+    for a in range(n):
+        xes = 0
+        oes = 0
+        for b in range(n):
+            if grid[b][a] == -1:
+                xes += 1
+            elif grid[b][a] == 1:
+                oes += 1
+        if xes > n // 2 or oes > n // 2:
+            return True
+    return False
+
+
+final = []
+
+
+def fillGivens(grid):
+    n = len(grid)
+    x = True
+    nGrid = []
+    for a in range(n):
+        y = []
+        for b in range(n):
+            y.append(grid[a][b])
+        nGrid.append(y)
+    while x:
+        x = False
+        for a in range(n):
+            for b in range(n - 1):
+                if nGrid[a][b] != 0 and nGrid[a][b] == nGrid[a][b + 1]:
+                    if b > 0 and nGrid[a][b - 1] == 0:
+                        nGrid[a][b - 1] = -1 * nGrid[a][b]
+                        x = True
+                    if b + 2 < n and nGrid[a][b + 2] == 0:
+                        nGrid[a][b + 2] = -1 * nGrid[a][b]
+                        x = True
+            for b in range(n - 2):
+                if nGrid[a][b] != 0 and nGrid[a][b] == nGrid[a][b + 2]:
+                    if nGrid[a][b + 1] == 0:
+                        nGrid[a][b + 1] = -1 * nGrid[a][b]
+                        x = True
+        for a in range(n):
+            for b in range(n - 1):
+                if nGrid[b][a] != 0 and nGrid[b][a] == nGrid[b + 1][a]:
+                    if b > 0 and nGrid[b - 1][a] == 0:
+                        nGrid[b - 1][a] = -1 * nGrid[b][a]
+                        x = True
+                    if b + 2 < n and nGrid[b + 2][a] == 0:
+                        nGrid[b + 2][a] = -1 * nGrid[b][a]
+                        x = True
+            for b in range(n - 2):
+                if nGrid[b][a] != 0 and nGrid[b][a] == nGrid[b + 2][a]:
+                    if nGrid[b + 1][a] == 0:
+                        nGrid[b + 1][a] = -1 * nGrid[b][a]
+                        x = True
+    return nGrid
+
+
+
+def run(grid, n):
+    global final
+    if len(final) == n:
+        return
+    grid = fillGivens(grid)
+    if isFull(grid):
+        if checkEqual(grid) and checkUnique(grid) and checkConsec(grid):
+            final = grid.copy()
+        return
+    x = nextEmpty(grid)
+    nGrid = []
+    for a in range(n):
+        y = []
+        for b in range(n):
+            y.append(grid[a][b])
+        nGrid.append(y)
+    nGrid[x//n][x % n] = -1
+    if not overSat(nGrid) and checkConsec(grid):
+        run(nGrid, n)
+    nGrid = []
+    for a in range(n):
+        y = []
+        for b in range(n):
+            y.append(grid[a][b])
+        nGrid.append(y)
+    nGrid[x//n][x % n] = 1
+    if not overSat(nGrid) and checkConsec(grid):
+        run(nGrid, n)
+
+
+for z in range(10):
+    final = []
+    line = file.readline().split()
+    n = int(line[0])
+    grid = []
+    for a in range(n):
+        x = []
+        for b in range(n):
+            x.append(0)
+        grid.append(x)
+    c = 0
+    for a in range(len(line[1])):
+        if line[1][a] == "X":
+            grid[c//n][c%n] = -1
+            c += 1
+            continue
+        if line[1][a] == "O":
+            grid[c // n][c % n] = 1
+            c += 1
+            continue
+        times = 1
+        y = a + 1
+        while y < len(line[1]) and ord(line[1][y]) < 65:
+            times *= 10
+            y += 1
+        c += int(line[1][a]) * times
+    run(grid, n)
+    print(answer(final))

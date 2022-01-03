@@ -1,0 +1,149 @@
+import java.util.ArrayList;
+
+public class SearchExpressions {
+	public static void main(String[] args){
+		String[] input = {
+			"PEACH_PIT, TEACH, EACH, PREACH, OUTREACH, PREACHER, SLEEP, ACHE, ARCHER, RESEARCH",
+			"P",
+			"[A",
+			"E?CH",
+			"*AC",
+			"P+L",
+			"?P&E",
+			"S+ER]",
+			"RE&ER]",
+			"P+I&H",
+			"R&I+T"
+		};
+		
+		String[] strings = input[0].split("\\s?,\\s?");
+		
+		for(int n = 1; n < input.length; n++){
+			System.out.println(n + ".");
+			
+			String regex = input[n];
+			
+			regex = regex.replace("]", "$");
+			regex = regex.replace("[", "^");
+			regex = regex.replace("?", ".");
+			regex = regex.replace("+", "|");
+			regex = regex.replace("*", "(.+)?");
+			
+			if(!regex.contains("&") && !regex.contains("|")){
+				if(regex.contains("$") && regex.contains("^")){
+					for(int k = 0; k < strings.length; k++){
+						if(strings[k].matches(regex)){
+							System.out.println(strings[k]);
+						}
+					}
+				}
+				else if(regex.contains("$")){
+					regex = "(.+)?" + regex;
+					
+					for(int k = 0; k < strings.length; k++){
+						if(strings[k].matches(regex)){
+							System.out.println(strings[k]);
+						}
+					}
+				}
+				else if(regex.contains("^")){
+					regex += "(.+)?";
+					
+					for(int k = 0; k < strings.length; k++){
+						if(strings[k].matches(regex)){
+							System.out.println(strings[k]);
+						}
+					}
+				}
+				else{
+					regex = "(.+)?" + regex + "(.+)?";
+					
+					for(int k = 0; k < strings.length; k++){
+						if(strings[k].matches(regex)){
+							System.out.println(strings[k]);
+						}
+					}
+				}
+			}
+			else{
+				String[] regs = regex.split("&");
+				ArrayList<String> regxs = new ArrayList<String>();
+				
+				for(int k = 0; k < regs.length; k++){
+					if(regs[k].contains("|")){
+						String[] regss = regs[k].split("\\|");
+						
+						for(int g = 0; g < regss.length; g++){
+							regxs.add(regss[g]);
+						}
+						
+						String[] temp = new String[regs.length - 1];
+						
+						for(int g = 0; g < k; g++){
+							temp[g] = regs[0];
+						}
+						
+						for(int g = k + 1; g < regs.length; g++){
+							temp[g - 1] = regs[g];
+						}
+						
+						regs = temp;
+					}
+				}
+				
+				boolean match = true;
+				
+				for(int k = 0; k < strings.length; k++){
+					for(int g = 0; g < regs.length; g++){
+						String regx = "";
+						
+						if(regs[g].contains("$")){
+							regx = "(.+)?" + regs[g];
+						}
+						else if(regs[g].contains("^")){
+							regx += "(.+)?";
+						}
+						else{
+							regx = "(.+)?" + regs[g] + "(.+)?";
+						}
+						
+						if(!strings[k].matches(regx)){
+							match = false;
+						}
+					}
+					
+					boolean match2 = false;
+					
+					for(int g = 0; g < regxs.size(); g++){
+						String regx = "";
+						
+						if(regxs.get(g).contains("$")){
+							regx = "(.+)?" + regxs.get(g);
+						}
+						else if(regxs.get(g).contains("^")){
+							regx += "(.+)?";
+						}
+						else{
+							regx = "(.+)?" + regxs.get(g) + "(.+)?";
+						}
+						
+						if(strings[k].matches(regx)){
+							match2 = true;
+						}
+							
+					}
+					
+					if(regxs.size() == 0){
+						match2 = true;
+					}
+					
+					if(match && match2){
+						System.out.println(strings[k]);
+					}
+					
+					match = true;
+				}
+			}
+		}
+	}
+}

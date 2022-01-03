@@ -1,0 +1,67 @@
+#include <fstream>
+#include <iostream>
+using namespace std;
+int i,k,nr[11],a[8],b[8],d[11],F[11],G[11],v;
+int main ()
+{
+	ifstream f ("gofish.in");
+	v=1;
+	for (i=1;i<=7;i++)
+	{
+		f>>a[i];
+		F[a[i]]++;
+	}
+	for (i=1;i<=7;i++)
+	{
+		f>>b[i];
+		G[b[i]]++;
+	}
+	for (i=1;i<=10;i++)
+		f>>d[i];
+	for (k=1;k<=10;k++)
+		f>>nr[k];
+	for (k=1;k<=10;k++)
+	{
+		if (k%2==1)
+		{
+			if (G[nr[k]]>0)
+			{
+				F[nr[k]]=F[nr[k]]+G[nr[k]];
+				G[nr[k]]=0;
+				if (F[nr[k]]>=4)
+						F[nr[k]]=F[nr[k]]-4;
+				cout<<F[nr[k]]<<"\n";
+			}
+			else
+			{
+				F[d[v]]++;
+				v++;
+				if (F[nr[k]]>=4)
+					F[nr[k]]=F[nr[k]]-4;
+				cout<<F[nr[k]]<<"\n";
+			}
+		}
+		else 
+		{
+			if (F[nr[k]]>0)
+			{
+				G[nr[k]]=G[nr[k]]+F[nr[k]];
+				F[nr[k]]=0;
+				if (G[nr[k]]>=4)
+					G[nr[k]]=G[nr[k]]-4;
+				cout<<G[nr[k]]<<"\n";
+			}
+			else
+			{
+				G[d[v]]++;
+				v++; 
+				if (G[nr[k]]>=4)
+					G[nr[k]]=G[nr[k]]-4;
+				cout<<G[nr[k]]<<"\n";
+			}
+		}
+	}
+	f.close ();
+	return 0;
+}
+

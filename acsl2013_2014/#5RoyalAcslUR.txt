@@ -1,0 +1,258 @@
+import java.io.*;
+import java.util.*;
+public class Royal_ACSL_Ur
+{
+
+	public static void main(String[] args) throws FileNotFoundException
+	{
+		
+		Scanner scan = new Scanner( new File("ROYALURINPUT"));
+		while(scan.hasNextLine())
+		{
+			int c = -1;
+			int newblack = -1;
+			int newwhite = -1;
+			String[] marked = scan.nextLine().split(",");
+			int[]black = new int[Integer.parseInt(marked[0])];		
+			int[]white = new int[Integer.parseInt(marked[Integer.parseInt(marked[0])+1])];
+			
+			for(int i = 0; i<black.length;i++)
+			{
+				black[i] = Integer.parseInt(marked[i+1]);
+			}
+			Arrays.sort(black);
+			
+			for(int i = 0; i<white.length;i++)
+			{
+				white[i] = Integer.parseInt(marked[black.length + 2 + i]);
+			}
+			Arrays.sort(white);
+			int blackmove = Integer.parseInt(marked[marked.length-2]);
+			int whitemove = Integer.parseInt(marked[marked.length-1]);
+			
+			boolean moved = false;
+			boolean nomove = false;
+			
+			for(int i = 0;i<black.length&&!moved;i++)
+			{
+				if(black[i] + blackmove == 18)
+				{
+					black[i] = 0;
+					moved = true;
+				}
+			}
+			
+			if(moved!=true)
+			{
+				for(int i = 0; i<black.length&&!moved;i++)
+				{
+					for(int j = 0;j<white.length&&!moved;j++)
+					{
+						int move = black[i] + blackmove;
+						if (move > 8)
+							move += 4;
+						if(move == white[j])
+						{
+							black[i]=white[j];
+							c = black[i];
+							moved = true;
+						}
+					}
+				}
+			}
+			
+			if(moved!=true)
+			{
+				for(int i = 0; i<black.length&&!moved; i++)
+				{
+					int move = black[i] + blackmove;
+					if (move > 8)
+						move += 4;
+					int newspot = move;
+					
+					if(!contains(black,newspot))
+					{
+						black[i] = newspot;
+						moved = true;
+					}
+				}
+			}
+			
+			if(moved!=true)
+			{
+				if(!contains(black,blackmove))
+				{
+					newblack = blackmove;
+					moved = true;
+				}
+			}
+			
+			if(moved!=true||(black.length==1&&black[0] == 0))
+			{
+				System.out.println("NONE");
+			}
+			else
+			{
+				for(int i = 0; i<black.length;i++)
+				{
+					if(black[i] != 0)
+					{
+						System.out.print(black[i]);
+						if(c == black[i])
+						{
+							System.out.print("C");
+						}
+						System.out.print("\t");
+					}
+				}
+				if(newblack!=-1)
+				{
+					System.out.print(newblack);
+				}
+				System.out.println();
+			}
+			
+			
+			
+			
+			
+			//White!!!
+			
+			
+			
+			
+			c = -1;
+			moved = false;
+			for(int i = 0; i<black.length;i++)
+			{
+				black[i] = Integer.parseInt(marked[i+1]);
+			}
+			Arrays.sort(black);
+			
+			for(int i = 0; i<white.length&&!moved;i++)
+			{
+				if(white[i] + whitemove == 18 || white[i]+1 == 20)
+				{
+					white[i] = 0;
+					moved = true;
+				}
+			}
+			
+			if(moved!=true)
+			{
+				for(int i = 0; i<white.length&&!moved;i++)
+				{
+					for(int j = 0;j<black.length&&!moved;j++)
+					{
+						int move = 0;
+						if (white[i] == 12||white[i] == 11||white[i] == 10||white[i] == 9)
+							move = white[i] - (8-whitemove);
+						else
+							if(white[i] == 5||white[i] == 6||white[i] == 7||white[i] == 8)
+							{
+								move = white[i] + whitemove;
+								if(move>8)
+									move+=4;
+							}
+							else
+								{
+									move = white[i] + whitemove;
+									if(move == 17||move == 18)
+									{
+										move += 2;
+									}
+								}
+						if(move == black[j])
+						{
+							white[i]=black[j];
+							c = white[i];
+							moved = true;
+						}
+					}
+				}
+			}
+			
+			if(moved!=true)
+			{
+				for(int i = 0; i<white.length&&!moved; i++)
+				{
+					int move = 0;
+					if (white[i] == 12||white[i] == 11||white[i] == 10||white[i] == 9)
+						{
+							move = white[i] + whitemove;
+							if(move > 12)
+								move = white[i] - (8-whitemove);
+						}
+					else
+						if(white[i] == 5||white[i] == 6||white[i] == 7||white[i] == 8)
+						{
+							move = white[i] + whitemove;
+							if(move>8)
+								move+=4;
+						}
+						else
+							{
+								move = white[i] + whitemove;
+								if(move == 17||move == 18)
+								{
+									move += 2;
+								}
+							}
+					int newspot = move;
+					
+					if(!contains(white,newspot))
+					{
+						white[i] = newspot;
+						moved = true;
+					}
+				}
+			}
+			if(moved!=true)
+			{
+				if(!contains(white,8+whitemove))
+				{
+					newwhite = whitemove + 8;
+					moved = true;
+				}
+			}
+			
+			if(moved!=true||(white.length==1&&white[0] == 0))
+			{
+				
+				System.out.println("NONE");
+			}
+			else
+			{
+				for(int i = 0; i<white.length;i++)
+				{
+					if(white[i] != 0)
+					{
+						System.out.print(white[i]);
+						if(c == white[i])
+						{
+							System.out.print("C");
+						}
+						System.out.print("\t");
+					}
+				}
+				if(newwhite!=-1)
+				{
+					System.out.print(newwhite);
+				}
+				System.out.println();
+			}
+		}
+	}
+
+	public static boolean contains(int[]array,int num)
+	{
+		for(int i = 0; i<array.length;i++)
+		{
+			if(array[i] == num)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+}
